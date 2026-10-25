@@ -1,0 +1,21 @@
+# Design source renders kept locally; optimized Android assets live under app/src/main/res.
+design/
+
+# Android / Gradle
+.tools/
+.gradle/
+build/
+**/build/
+local.properties
+*.iml
+.idea/
+
+# Signing credentials and generated releases
+*.jks
+*.keystore
+release/
+*.apk
+*.aab
+
+# OS files
+.DS_Store

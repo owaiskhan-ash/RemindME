@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">RemindME</string>
+    <string name="tagline">सही समय पर एक स्पष्ट याद दिलाना।</string>
+    <string name="logo_description">फेल्ट और चमड़े के आइकन में धंसा हुआ RE</string>
+
+    <string name="prompt">आप क्या याद रखना चाहते हैं?</string>
+    <string name="prompt_support">स्वाभाविक रूप से लिखें। अलार्म शेड्यूल करने के लिए तारीख और समय शामिल करें।</string>
+    <string name="input_hint">आजमाएं: कल सुबह 9 बजे - गृहकार्य के बारे में अब्दुल्लाह से बात करें</string>
+    <string name="smart_parse">समझें</string>
+    <string name="preview_empty">आपका रिमाइंडर यहां दिखाई देगा।</string>
+    <string name="preview_scheduled">%1$s - %2$s</string>
+    <string name="preview_ready">शेड्यूल करने के लिए तैयार।</string>
+    <string name="missing_date_and_time">कृपया तारीख और समय बताएं, उदाहरण के लिए कल सुबह 9 बजे।</string>
+    <string name="missing_date">कृपया तारीख बताएं, उदाहरण के लिए कल।</string>
+    <string name="missing_time">कृपया समय बताएं, उदाहरण के लिए सुबह 9 बजे।</string>
+    <string name="write_reminder_first">पहले एक रिमाइंडर लिखें</string>
+    <string name="default_reminder_title">रिमाइंडर</string>
+    <string name="set_reminder">रिमाइंडर सेट करें</string>
+    <string name="alarm_set_for">अलार्म %1$s के लिए सेट है</string>
+
+    <string name="notification_default">समय होने पर स्पष्ट सूचना और हल्का अलार्म पाने के लिए नोटिफिकेशन चालू करें।</string>
+    <string name="access_notification_needed">समय होने पर स्पष्ट सूचना और हल्का अलार्म पाने के लिए नोटिफिकेशन चालू करें।</string>
+    <string name="access_exact_alarm_needed">नोटिफिकेशन चालू हैं। मिनट तक सटीक रिमाइंडर के लिए सटीक अलार्म की अनुमति दें।</string>
+    <string name="access_dnd_needed">अलार्म टोन, फोन साइलेंट होने पर भी, अलार्म वॉल्यूम का उपयोग करते हैं। केवल तभी डू नॉट डिस्टर्ब पहुंच दें जब आप अलार्म को उसे पार करने देना चाहते हों।</string>
+    <string name="access_ready">अलार्म अलर्ट तैयार हैं। वे Android अलार्म स्ट्रीम का उपयोग करते हैं, इसलिए रिंग और साइलेंट मोड उन्हें म्यूट नहीं करेंगे।</string>
+    <string name="enable">चालू करें</string>
+    <string name="allow_alarms">अलार्म की अनुमति दें</string>
+    <string name="dnd_access">डू नॉट डिस्टर्ब पहुंच</string>
+    <string name="access_on">चालू</string>
+    <string name="open_alarm_settings">अलार्म और रिमाइंडर की अनुमति देने के लिए Android सेटिंग खोलें।</string>
+    <string name="open_dnd_settings">डू नॉट डिस्टर्ब पहुंच की अनुमति देने के लिए Android सेटिंग खोलें।</string>
+    <string name="notifications_enabled">नोटिफिकेशन चालू हैं</string>
+    <string name="notifications_later">रिमाइंडर सहेज दिए गए हैं। आप बाद में Android सेटिंग में अलर्ट चालू कर सकते हैं।</string>
+
+    <string name="upcoming">आने वाले</string>
+    <string name="empty_upcoming">अभी कुछ शेड्यूल नहीं है। आपका अगला हल्का रिमाइंडर यहां दिखाई देगा।</string>
+    <string name="empty_history">अभी कोई पिछला रिमाइंडर नहीं है। किसी को पूरा चिह्नित करें और वह यहां दिखाई देगा।</string>
+    <string name="due_now_action">अभी समय है - अलार्म से स्नूज़ करें या पूरा चिह्नित करें।</string>
+    <string name="button_mark_done">पूरा चिह्नित करें</string>
+    <string name="button_delete">हटाएं</string>
+    <string name="completed">पूर्ण</string>
+    <string name="done_moved_previous">पूरा चिह्नित किया गया और पिछले रिमाइंडर में भेजा गया।</string>
+    <string name="reminder_deleted">रिमाइंडर हटाया गया</string>
+    <string name="completed_cleared">पूर्ण रिमाइंडर हटाए गए</string>
+    <string name="privacy_note">आपके रिमाइंडर केवल इस डिवाइस पर संग्रहीत होते हैं।</string>
+
+    <string name="notification_title">RemindME</string>
+    <string name="alarm_active_title">RemindME अलार्म</string>
+    <string name="alarm_channel_name">रिमाइंडर अलार्म</string>
+    <string name="alarm_channel_description">स्नूज़ और पूरा चिह्नित करें कार्रवाइयों वाले रिमाइंडर अलार्म।</string>
+    <string name="snooze_ten_minutes">10 मिनट स्नूज़</string>
+    <string name="mark_done">पूरा चिह्नित करें</string>
+
+    <string name="history_title">पिछले रिमाइंडर</string>
+    <string name="history_support">पूर्ण रिमाइंडर यहां रहते हैं, आपकी राह से दूर।</string>
+    <string name="clear_history">पूर्ण हटाएं</string>
+
+    <string name="settings_title">सेटिंग</string>
+    <string name="settings_support">अपने रिमाइंडर भरोसेमंद और अपनी जगह शांत रखें।</string>
+    <string name="language_title">भाषा</string>
+    <string name="language_description">RemindME और इसकी अलार्म कार्रवाइयों के लिए भाषा चुनें।</string>
+    <string name="language_english">English</string>
+    <string name="language_indonesian">Bahasa Indonesia</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_portuguese">Português</string>
+    <string name="language_hindi">हिन्दी</string>
+    <string name="language_arabic">العربية</string>
+    <string name="language_chinese">简体中文</string>
+    <string name="alarm_sound_title">अलार्म ध्वनि</string>
+    <string name="alarm_sound_description">आपके डिवाइस का अलार्म डिफ़ॉल्ट बना रहता है।</string>
+    <string name="device_alarm_label">डिवाइस अलार्म ध्वनि (डिफ़ॉल्ट)</string>
+    <string name="remindme_alarm_label">RemindME अलार्म ध्वनि</string>
+    <string name="alarm_stream_note">दोनों विकल्प Android अलार्म स्ट्रीम पर बजते हैं, साइलेंट रिंगर स्ट्रीम पर नहीं।</string>
+    <string name="dark_mode_title">डार्क मोड</string>
+    <string name="dark_mode_description">रिमाइंडर के लिए अधिक गहरी और नरम जगह उपयोग करें।</string>
+    <string name="dark_mode_toggle_description">डार्क मोड बदलें</string>
+    <string name="settings_local_note">सेटिंग केवल इस डिवाइस पर संग्रहीत होती हैं।</string>
+
+    <string name="today_at">आज %1$s बजे</string>
+    <string name="tomorrow_at">कल %1$s बजे</string>
+    <string name="date_at">%1$s, %2$s बजे</string>
+
+    <string name="nav_home">होम</string>
+    <string name="nav_previous">पिछले</string>
+    <string name="nav_previous_description">पिछले रिमाइंडर</string>
+    <string name="nav_settings">सेटिंग</string>
+</resources>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">RemindME</string>
+    <string name="tagline">Un aviso claro, en el momento adecuado.</string>
+    <string name="logo_description">RE grabado en un icono de fieltro y cuero</string>
+
+    <string name="prompt">¿Qué quieres recordar?</string>
+    <string name="prompt_support">Escríbelo de forma natural. Incluye una fecha y una hora para programar la alarma.</string>
+    <string name="input_hint">Prueba: Mañana a las 9:00 - hablar con Abdullah sobre la tarea</string>
+    <string name="smart_parse">Interpretar</string>
+    <string name="preview_empty">Tu recordatorio aparecerá aquí.</string>
+    <string name="preview_scheduled">%1$s - %2$s</string>
+    <string name="preview_ready">Listo para programar.</string>
+    <string name="missing_date_and_time">Indica una fecha y una hora, por ejemplo mañana a las 9:00.</string>
+    <string name="missing_date">Indica una fecha, por ejemplo mañana.</string>
+    <string name="missing_time">Indica una hora, por ejemplo a las 9:00.</string>
+    <string name="write_reminder_first">Escribe primero un recordatorio</string>
+    <string name="default_reminder_title">Recordatorio</string>
+    <string name="set_reminder">Crear recordatorio</string>
+    <string name="alarm_set_for">Alarma programada para %1$s</string>
+
+    <string name="notification_default">Activa las notificaciones para recibir un aviso claro y una alarma suave cuando llegue el momento.</string>
+    <string name="access_notification_needed">Activa las notificaciones para recibir un aviso claro y una alarma suave cuando llegue el momento.</string>
+    <string name="access_exact_alarm_needed">Las notificaciones están activadas. Permite alarmas exactas para recordatorios precisos al minuto.</string>
+    <string name="access_dnd_needed">Los tonos de alarma usan el volumen de alarmas, incluso cuando el teléfono está en silencio. Permite el acceso a No molestar solo si quieres que las alarmas también lo atraviesen.</string>
+    <string name="access_ready">Las alertas de alarma están listas. Usan el canal de alarmas de Android, por lo que el modo de timbre y silencio no las silenciará.</string>
+    <string name="enable">Activar</string>
+    <string name="allow_alarms">Permitir alarmas</string>
+    <string name="dnd_access">Acceso a No molestar</string>
+    <string name="access_on">Activo</string>
+    <string name="open_alarm_settings">Abre los ajustes de Android para permitir alarmas y recordatorios.</string>
+    <string name="open_dnd_settings">Abre los ajustes de Android para permitir el acceso a No molestar.</string>
+    <string name="notifications_enabled">Notificaciones activadas</string>
+    <string name="notifications_later">Los recordatorios se guardaron. Puedes activar las alertas más tarde en los ajustes de Android.</string>
+
+    <string name="upcoming">Próximos</string>
+    <string name="empty_upcoming">Aún no hay nada programado. Tu próximo aviso suave aparecerá aquí.</string>
+    <string name="empty_history">Aún no hay recordatorios anteriores. Marca uno como hecho y aparecerá aquí.</string>
+    <string name="due_now_action">Ahora: pospón desde la alarma o márcalo como hecho.</string>
+    <string name="button_mark_done">Marcar como hecho</string>
+    <string name="button_delete">Eliminar</string>
+    <string name="completed">Completado</string>
+    <string name="done_moved_previous">Marcado como hecho y movido a Anteriores.</string>
+    <string name="reminder_deleted">Recordatorio eliminado</string>
+    <string name="completed_cleared">Recordatorios completados eliminados</string>
+    <string name="privacy_note">Tus recordatorios se guardan solo en este dispositivo.</string>
+
+    <string name="notification_title">RemindME</string>
+    <string name="alarm_active_title">Alarma de RemindME</string>
+    <string name="alarm_channel_name">Alarmas de recordatorio</string>
+    <string name="alarm_channel_description">Alarmas de recordatorio con acciones Posponer y Marcar como hecho.</string>
+    <string name="snooze_ten_minutes">Posponer 10 min</string>
+    <string name="mark_done">Marcar como hecho</string>
+
+    <string name="history_title">Recordatorios anteriores</string>
+    <string name="history_support">Los recordatorios completados viven aquí, sin estorbar.</string>
+    <string name="clear_history">Borrar completados</string>
+
+    <string name="settings_title">Ajustes</string>
+    <string name="settings_support">Mantén tus recordatorios fiables y tu espacio tranquilo.</string>
+    <string name="language_title">Idioma</string>
+    <string name="language_description">Elige el idioma de RemindME y de sus acciones de alarma.</string>
+    <string name="language_english">English</string>
+    <string name="language_indonesian">Bahasa Indonesia</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_portuguese">Português</string>
+    <string name="language_hindi">हिन्दी</string>
+    <string name="language_arabic">العربية</string>
+    <string name="language_chinese">简体中文</string>
+    <string name="alarm_sound_title">Sonido de alarma</string>
+    <string name="alarm_sound_description">La alarma de tu dispositivo sigue siendo la predeterminada.</string>
+    <string name="device_alarm_label">Sonido de alarma del dispositivo (predeterminado)</string>
+    <string name="remindme_alarm_label">Sonido de alarma de RemindME</string>
+    <string name="alarm_stream_note">Ambas opciones se reproducen en el canal de alarmas de Android, no en el canal de timbre silencioso.</string>
+    <string name="dark_mode_title">Modo oscuro</string>
+    <string name="dark_mode_description">Usa un espacio de recordatorios más oscuro y suave.</string>
+    <string name="dark_mode_toggle_description">Cambiar modo oscuro</string>
+    <string name="settings_local_note">Los ajustes se guardan solo en este dispositivo.</string>
+
+    <string name="today_at">Hoy a las %1$s</string>
+    <string name="tomorrow_at">Mañana a las %1$s</string>
+    <string name="date_at">%1$s a las %2$s</string>
+
+    <string name="nav_home">Inicio</string>
+    <string name="nav_previous">Anteriores</string>
+    <string name="nav_previous_description">Recordatorios anteriores</string>
+    <string name="nav_settings">Ajustes</string>
+</resources>
