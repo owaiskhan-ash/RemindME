@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">RemindME</string>
+    <string name="tagline">تنبيه واضح في الوقت المناسب.</string>
+    <string name="logo_description">RE غائر في أيقونة من اللباد والجلد</string>
+
+    <string name="prompt">ما الذي تريد تذكره؟</string>
+    <string name="prompt_support">اكتب بشكل طبيعي. أضف تاريخا ووقتا حتى يمكن جدولة المنبه.</string>
+    <string name="input_hint">مثال: غدا الساعة 9 صباحا - تحدث مع عبدالله عن الواجب</string>
+    <string name="smart_parse">تحليل ذكي</string>
+    <string name="preview_empty">سيظهر تذكيرك هنا.</string>
+    <string name="preview_scheduled">%1$s - %2$s</string>
+    <string name="preview_ready">جاهز للجدولة.</string>
+    <string name="missing_date_and_time">يرجى ذكر تاريخ ووقت، مثل غدا الساعة 9 صباحا.</string>
+    <string name="missing_date">يرجى ذكر تاريخ، مثل غدا.</string>
+    <string name="missing_time">يرجى ذكر وقت، مثل الساعة 9 صباحا.</string>
+    <string name="write_reminder_first">اكتب تذكيرا أولا</string>
+    <string name="default_reminder_title">تذكير</string>
+    <string name="set_reminder">ضبط تذكير</string>
+    <string name="alarm_set_for">تم ضبط المنبه لـ %1$s</string>
+
+    <string name="notification_default">فعّل الإشعارات لتلقي تنبيه واضح ومنبه لطيف عند حلول الموعد.</string>
+    <string name="access_notification_needed">فعّل الإشعارات لتلقي تنبيه واضح ومنبه لطيف عند حلول الموعد.</string>
+    <string name="access_exact_alarm_needed">الإشعارات مفعلة. اسمح بالمنبهات الدقيقة للحصول على تذكيرات دقيقة بالدقيقة.</string>
+    <string name="access_dnd_needed">تستخدم نغمات المنبه مستوى صوت المنبه، حتى عندما يكون الهاتف صامتا. اسمح بالوصول إلى عدم الإزعاج فقط إذا كنت تريد للمنبهات تجاوزه أيضا.</string>
+    <string name="access_ready">تنبيهات المنبه جاهزة. تستخدم مسار منبه Android، لذا لن يكتمها وضع الرنين أو الصامت.</string>
+    <string name="enable">تفعيل</string>
+    <string name="allow_alarms">السماح بالمنبهات</string>
+    <string name="dnd_access">الوصول إلى عدم الإزعاج</string>
+    <string name="access_on">مفعّل</string>
+    <string name="open_alarm_settings">افتح إعدادات Android للسماح بالمنبهات والتذكيرات.</string>
+    <string name="open_dnd_settings">افتح إعدادات Android للسماح بالوصول إلى عدم الإزعاج.</string>
+    <string name="notifications_enabled">الإشعارات مفعلة</string>
+    <string name="notifications_later">تم حفظ التذكيرات. يمكنك تفعيل التنبيهات لاحقا من إعدادات Android.</string>
+
+    <string name="upcoming">القادمة</string>
+    <string name="empty_upcoming">لا يوجد شيء مجدول بعد. سيظهر تنبيهك اللطيف التالي هنا.</string>
+    <string name="empty_history">لا توجد تذكيرات سابقة بعد. علّم أحدها كمكتمل وسيظهر هنا.</string>
+    <string name="due_now_action">حان الآن - غفوة من المنبه أو علّمه كمكتمل.</string>
+    <string name="button_mark_done">تعليم كمكتمل</string>
+    <string name="button_delete">حذف</string>
+    <string name="completed">مكتمل</string>
+    <string name="done_moved_previous">تم تعليمه كمكتمل ونقله إلى السابق.</string>
+    <string name="reminder_deleted">تم حذف التذكير</string>
+    <string name="completed_cleared">تم مسح التذكيرات المكتملة</string>
+    <string name="privacy_note">تخزن تذكيراتك على هذا الجهاز فقط.</string>
+
+    <string name="notification_title">RemindME</string>
+    <string name="alarm_active_title">منبه RemindME</string>
+    <string name="alarm_channel_name">منبهات التذكير</string>
+    <string name="alarm_channel_description">منبهات تذكير مع إجراءي الغفوة والتعليم كمكتمل.</string>
+    <string name="snooze_ten_minutes">غفوة 10 دقائق</string>
+    <string name="mark_done">تعليم كمكتمل</string>
+
+    <string name="history_title">التذكيرات السابقة</string>
+    <string name="history_support">تظل التذكيرات المكتملة هنا، بعيدا عن طريقك.</string>
+    <string name="clear_history">مسح المكتملة</string>
+
+    <string name="settings_title">الإعدادات</string>
+    <string name="settings_support">حافظ على موثوقية تذكيراتك وهدوء مساحتك.</string>
+    <string name="language_title">اللغة</string>
+    <string name="language_description">اختر لغة RemindME وإجراءات المنبه.</string>
+    <string name="language_english">English</string>
+    <string name="language_indonesian">Bahasa Indonesia</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_portuguese">Português</string>
+    <string name="language_hindi">हिन्दी</string>
+    <string name="language_arabic">العربية</string>
+    <string name="language_chinese">简体中文</string>
+    <string name="alarm_sound_title">صوت المنبه</string>
+    <string name="alarm_sound_description">يظل منبه جهازك هو الخيار الافتراضي.</string>
+    <string name="device_alarm_label">صوت منبه الجهاز (افتراضي)</string>
+    <string name="remindme_alarm_label">صوت منبه RemindME</string>
+    <string name="alarm_stream_note">يعمل الخياران على مسار منبه Android، وليس مسار الرنين الصامت.</string>
+    <string name="dark_mode_title">الوضع الداكن</string>
+    <string name="dark_mode_description">استخدم مساحة تذكيرات أكثر قتامة وهدوءا.</string>
+    <string name="dark_mode_toggle_description">تبديل الوضع الداكن</string>
+    <string name="settings_local_note">تخزن الإعدادات على هذا الجهاز فقط.</string>
+
+    <string name="today_at">اليوم الساعة %1$s</string>
+    <string name="tomorrow_at">غدا الساعة %1$s</string>
+    <string name="date_at">%1$s الساعة %2$s</string>
+
+    <string name="nav_home">الرئيسية</string>
+    <string name="nav_previous">السابقة</string>
+    <string name="nav_previous_description">التذكيرات السابقة</string>
+    <string name="nav_settings">الإعدادات</string>
+</resources>

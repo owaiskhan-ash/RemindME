@@ -348,6 +348,51 @@
                             android:text="@string/language_indonesian"
                             android:textColor="@color/ink"
                             android:textSize="14sp" />
+
+                        <RadioButton
+                            android:id="@+id/spanish_language_radio"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:text="@string/language_spanish"
+                            android:textColor="@color/ink"
+                            android:textSize="14sp" />
+
+                        <RadioButton
+                            android:id="@+id/portuguese_language_radio"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:text="@string/language_portuguese"
+                            android:textColor="@color/ink"
+                            android:textSize="14sp" />
+
+                        <RadioButton
+                            android:id="@+id/hindi_language_radio"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:text="@string/language_hindi"
+                            android:textColor="@color/ink"
+                            android:textSize="14sp" />
+
+                        <RadioButton
+                            android:id="@+id/arabic_language_radio"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:text="@string/language_arabic"
+                            android:textColor="@color/ink"
+                            android:textSize="14sp" />
+
+                        <RadioButton
+                            android:id="@+id/chinese_language_radio"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:text="@string/language_chinese"
+                            android:textColor="@color/ink"
+                            android:textSize="14sp" />
                     </RadioGroup>
                 </LinearLayout>
 

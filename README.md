@@ -10,12 +10,17 @@ or in Bahasa Indonesia:
 
 > `Ingatkan saya besok jam 9 pagi untuk cek PR Abdullah`
 
+or in Spanish:
+
+> `Recuérdame llamar a mamá mañana a las 9:15`
+
 RemindME turns those phrases into a scheduled Android alarm. It also corrects common English input such as `tomrws` and `ceckin`.
 
 ## What the app does
 
-- Offers an in-app **English / Bahasa Indonesia** language setting that persists across launches
-- Parses common English and Bahasa Indonesia reminder phrases, including `besok`, `lusa`, weekdays, `jam 9 pagi`, `pukul 16:30`, `dalam 10 menit`, and `10 menit lagi`
+- Offers persistent in-app language choices for **English, Bahasa Indonesia, Español, Português, हिन्दी, العربية, and 简体中文**
+- Localizes the app interface, alarm notifications, Snooze and Mark done actions in every offered language; Arabic also receives right-to-left layout direction
+- Parses common reminder phrases in all seven languages, including dates, weekdays, clock times, day periods, and relative durations such as `mañana a las 9`, `amanhã às 18:30`, `कल शाम 6 बजे`, `غدا الساعة 9 مساء`, `明天上午9点`, `besok jam 9 pagi`, and `in 10 minutes`
 - Requires an explicit date and time before scheduling; the preview clearly asks for any missing detail instead of silently guessing a time
 - Schedules a device alarm with `AlarmManager`, so it can arrive after the app is closed
 - Plays through Android's dedicated **alarm** audio stream, so ordinary ring/silent mode does not mute a due reminder
@@ -45,11 +50,11 @@ The installable APK is written to:
 app/build/outputs/apk/release/app-release.apk
 ```
 
-The release build is signed with the standard debug key so it is installable for testing. Before Google Play distribution, replace the `signingConfigs.debug` release configuration in `app/build.gradle` with your private upload key; do not commit that key.
+The Gradle release build is signed with the standard debug key so it is installable for testing. Before Google Play distribution, replace the `signingConfigs.debug` release configuration in `app/build.gradle` with your private upload key; do not commit that key. Tagged sandbox APKs are also test-signed; because no production key is stored in this repository, Android may require uninstalling an older test APK before installing a newer tagged test APK.
 
 ## CI release artifact
 
-`.github/workflows/android-release.yml` builds and uploads `RemindME-v1.0.4-release-apk` on every push to this Arena branch. The workflow uses JDK 17 and Android API 35.
+`.github/workflows/android-release.yml` builds and uploads `RemindME-v1.0.5-release-apk` on every push to this Arena branch. The workflow uses JDK 17 and Android API 35.
 
 ## Important Android behavior
 

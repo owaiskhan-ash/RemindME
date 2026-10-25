@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">RemindME</string>
+    <string name="tagline">在恰当的时刻给你清晰提醒。</string>
+    <string name="logo_description">压印在毛毡和皮革图标中的 RE</string>
+
+    <string name="prompt">你想记住什么？</string>
+    <string name="prompt_support">自然地输入内容。请包含日期和时间，以便安排闹钟。</string>
+    <string name="input_hint">示例：明天上午 9 点 - 和 Abdullah 讨论作业</string>
+    <string name="smart_parse">智能解析</string>
+    <string name="preview_empty">你的提醒会显示在这里。</string>
+    <string name="preview_scheduled">%1$s - %2$s</string>
+    <string name="preview_ready">可以安排了。</string>
+    <string name="missing_date_and_time">请说明日期和时间，例如明天上午 9 点。</string>
+    <string name="missing_date">请说明日期，例如明天。</string>
+    <string name="missing_time">请说明时间，例如上午 9 点。</string>
+    <string name="write_reminder_first">请先输入提醒</string>
+    <string name="default_reminder_title">提醒</string>
+    <string name="set_reminder">设置提醒</string>
+    <string name="alarm_set_for">闹钟已设为 %1$s</string>
+
+    <string name="notification_default">请开启通知，以便在到点时收到清晰提示和轻柔闹钟。</string>
+    <string name="access_notification_needed">请开启通知，以便在到点时收到清晰提示和轻柔闹钟。</string>
+    <string name="access_exact_alarm_needed">通知已开启。请允许精确闹钟，以获得精确到分钟的提醒。</string>
+    <string name="access_dnd_needed">闹钟铃声使用闹钟音量，即使手机处于静音状态也是如此。只有希望闹钟穿透勿扰模式时，才允许勿扰模式访问权限。</string>
+    <string name="access_ready">闹钟提醒已准备好。它们使用 Android 闹钟音频流，因此响铃和静音模式不会使其静音。</string>
+    <string name="enable">开启</string>
+    <string name="allow_alarms">允许闹钟</string>
+    <string name="dnd_access">勿扰模式访问权限</string>
+    <string name="access_on">已开启</string>
+    <string name="open_alarm_settings">打开 Android 设置以允许闹钟和提醒。</string>
+    <string name="open_dnd_settings">打开 Android 设置以允许勿扰模式访问权限。</string>
+    <string name="notifications_enabled">通知已开启</string>
+    <string name="notifications_later">提醒已保存。你可以稍后在 Android 设置中开启提醒通知。</string>
+
+    <string name="upcoming">即将到来</string>
+    <string name="empty_upcoming">尚未安排任何事项。你的下一条轻柔提醒会显示在这里。</string>
+    <string name="empty_history">还没有之前的提醒。将一条提醒标为完成后，它会显示在这里。</string>
+    <string name="due_now_action">现在到时间了 - 从闹钟中稍后提醒，或将其标为完成。</string>
+    <string name="button_mark_done">标为完成</string>
+    <string name="button_delete">删除</string>
+    <string name="completed">已完成</string>
+    <string name="done_moved_previous">已标为完成并移至之前的提醒。</string>
+    <string name="reminder_deleted">提醒已删除</string>
+    <string name="completed_cleared">已清除完成的提醒</string>
+    <string name="privacy_note">你的提醒仅存储在此设备上。</string>
+
+    <string name="notification_title">RemindME</string>
+    <string name="alarm_active_title">RemindME 闹钟</string>
+    <string name="alarm_channel_name">提醒闹钟</string>
+    <string name="alarm_channel_description">带有稍后提醒和标为完成操作的提醒闹钟。</string>
+    <string name="snooze_ten_minutes">稍后提醒 10 分钟</string>
+    <string name="mark_done">标为完成</string>
+
+    <string name="history_title">之前的提醒</string>
+    <string name="history_support">完成的提醒会留在这里，不打扰你。</string>
+    <string name="clear_history">清除已完成项</string>
+
+    <string name="settings_title">设置</string>
+    <string name="settings_support">让你的提醒可靠，让你的空间安静。</string>
+    <string name="language_title">语言</string>
+    <string name="language_description">选择 RemindME 及其闹钟操作的语言。</string>
+    <string name="language_english">English</string>
+    <string name="language_indonesian">Bahasa Indonesia</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_portuguese">Português</string>
+    <string name="language_hindi">हिन्दी</string>
+    <string name="language_arabic">العربية</string>
+    <string name="language_chinese">简体中文</string>
+    <string name="alarm_sound_title">闹钟声音</string>
+    <string name="alarm_sound_description">你的设备闹钟仍是默认选项。</string>
+    <string name="device_alarm_label">设备闹钟声音（默认）</string>
+    <string name="remindme_alarm_label">RemindME 闹钟声音</string>
+    <string name="alarm_stream_note">两个选项都通过 Android 闹钟音频流播放，而不是静音铃声音频流。</string>
+    <string name="dark_mode_title">深色模式</string>
+    <string name="dark_mode_description">使用更暗、更柔和的提醒空间。</string>
+    <string name="dark_mode_toggle_description">切换深色模式</string>
+    <string name="settings_local_note">设置仅存储在此设备上。</string>
+
+    <string name="today_at">今天 %1$s</string>
+    <string name="tomorrow_at">明天 %1$s</string>
+    <string name="date_at">%1$s %2$s</string>
+
+    <string name="nav_home">首页</string>
+    <string name="nav_previous">之前</string>
+    <string name="nav_previous_description">之前的提醒</string>
+    <string name="nav_settings">设置</string>
+</resources>

@@ -100,7 +100,9 @@ public final class MainActivity extends Activity {
         configuration.uiMode = (configuration.uiMode & ~Configuration.UI_MODE_NIGHT_MASK)
                 | (savedPreferences.isDarkMode()
                 ? Configuration.UI_MODE_NIGHT_YES : Configuration.UI_MODE_NIGHT_NO);
-        configuration.setLocale(savedPreferences.getAppLocale());
+        Locale locale = savedPreferences.getAppLocale();
+        configuration.setLocale(locale);
+        configuration.setLayoutDirection(locale);
         super.attachBaseContext(newBase.createConfigurationContext(configuration));
     }
 
@@ -187,11 +189,9 @@ public final class MainActivity extends Activity {
 
         languageGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override public void onCheckedChanged(RadioGroup group, int checkedId) {
-                boolean selectedIndonesian = checkedId == R.id.indonesian_language_radio;
-                if (preferences.usesIndonesian() == selectedIndonesian) return;
-                preferences.setLanguageChoice(selectedIndonesian
-                        ? AppPreferences.LANGUAGE_INDONESIAN
-                        : AppPreferences.LANGUAGE_ENGLISH);
+                String selectedLanguage = languageChoiceForRadio(checkedId);
+                if (preferences.getLanguageChoice().equals(selectedLanguage)) return;
+                preferences.setLanguageChoice(selectedLanguage);
                 recreate();
             }
         });
@@ -211,11 +211,30 @@ public final class MainActivity extends Activity {
     }
 
     private void syncSettingsControls() {
-        languageGroup.check(preferences.usesIndonesian()
-                ? R.id.indonesian_language_radio : R.id.english_language_radio);
+        languageGroup.check(languageRadioId(preferences.getLanguageChoice()));
         alarmSoundGroup.check(preferences.usesRemindMeSound()
                 ? R.id.remindme_alarm_radio : R.id.device_alarm_radio);
         darkModeSwitch.setChecked(preferences.isDarkMode());
+    }
+
+    private String languageChoiceForRadio(int checkedId) {
+        if (checkedId == R.id.indonesian_language_radio) return AppPreferences.LANGUAGE_INDONESIAN;
+        if (checkedId == R.id.spanish_language_radio) return AppPreferences.LANGUAGE_SPANISH;
+        if (checkedId == R.id.portuguese_language_radio) return AppPreferences.LANGUAGE_PORTUGUESE;
+        if (checkedId == R.id.hindi_language_radio) return AppPreferences.LANGUAGE_HINDI;
+        if (checkedId == R.id.arabic_language_radio) return AppPreferences.LANGUAGE_ARABIC;
+        if (checkedId == R.id.chinese_language_radio) return AppPreferences.LANGUAGE_CHINESE;
+        return AppPreferences.LANGUAGE_ENGLISH;
+    }
+
+    private int languageRadioId(String language) {
+        if (AppPreferences.LANGUAGE_INDONESIAN.equals(language)) return R.id.indonesian_language_radio;
+        if (AppPreferences.LANGUAGE_SPANISH.equals(language)) return R.id.spanish_language_radio;
+        if (AppPreferences.LANGUAGE_PORTUGUESE.equals(language)) return R.id.portuguese_language_radio;
+        if (AppPreferences.LANGUAGE_HINDI.equals(language)) return R.id.hindi_language_radio;
+        if (AppPreferences.LANGUAGE_ARABIC.equals(language)) return R.id.arabic_language_radio;
+        if (AppPreferences.LANGUAGE_CHINESE.equals(language)) return R.id.chinese_language_radio;
+        return R.id.english_language_radio;
     }
 
     @SuppressWarnings("deprecation")
@@ -630,13 +649,13 @@ public final class MainActivity extends Activity {
         target.setTimeInMillis(timestamp);
         Locale locale = preferences.getAppLocale();
         DateFormat timeFormat = new SimpleDateFormat(
-                preferences.usesIndonesian() ? "HH:mm" : "h:mm a", locale);
+                preferences.usesTwentyFourHourLanguageFormat() ? "HH:mm" : "h:mm a", locale);
         String time = timeFormat.format(new Date(timestamp));
 
         if (sameDay(target, now)) return getString(R.string.today_at, time);
         if (sameDay(target, tomorrow)) return getString(R.string.tomorrow_at, time);
         DateFormat dateFormat = new SimpleDateFormat(
-                preferences.usesIndonesian() ? "EEE, d MMM" : "EEE, MMM d", locale);
+                preferences.usesTwentyFourHourLanguageFormat() ? "EEE, d MMM" : "EEE, MMM d", locale);
         return getString(R.string.date_at, dateFormat.format(new Date(timestamp)), time);
     }
 

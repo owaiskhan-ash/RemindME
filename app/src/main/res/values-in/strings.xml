@@ -62,6 +62,11 @@
     <string name="language_description">Pilih bahasa untuk RemindME dan tindakan alarmnya.</string>
     <string name="language_english">English</string>
     <string name="language_indonesian">Bahasa Indonesia</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_portuguese">Português</string>
+    <string name="language_hindi">हिन्दी</string>
+    <string name="language_arabic">العربية</string>
+    <string name="language_chinese">简体中文</string>
     <string name="alarm_sound_title">Nada alarm</string>
     <string name="alarm_sound_description">Nada alarm perangkat tetap menjadi pilihan awal.</string>
     <string name="device_alarm_label">Nada alarm perangkat (awal)</string>
