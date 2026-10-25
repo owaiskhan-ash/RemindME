@@ -1,0 +1,17 @@
+# Android / Gradle
+.gradle/
+build/
+**/build/
+local.properties
+*.iml
+.idea/
+
+# Signing credentials and generated releases
+*.jks
+*.keystore
+release/
+*.apk
+*.aab
+
+# OS files
+.DS_Store

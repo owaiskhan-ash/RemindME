@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">RemindME</string>
+    <string name="tagline">A clear nudge, at the right moment.</string>
+    <string name="logo_description">RE, recessed into a felt-textured box</string>
+    <string name="prompt">What do you want to remember?</string>
+    <string name="prompt_support">Write it naturally. We’ll understand the date, time, and person.</string>
+    <string name="input_hint">Try: Remind me for tomrws homework ceckin for Abdullah</string>
+    <string name="smart_parse">Smart parse</string>
+    <string name="preview_empty">Your reminder will appear here.</string>
+    <string name="set_reminder">Set reminder</string>
+    <string name="notification_default">Turn on notifications to receive a clear alert and gentle alarm when it is due.</string>
+    <string name="enable">Enable</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="clear_done">Clear done</string>
+    <string name="privacy_note">Your reminders are stored only on this device.</string>
+    <string name="notification_title">RemindME</string>
+    <string name="snooze_ten_minutes">Snooze 10 min</string>
+    <string name="mark_done">Mark done</string>
+</resources>
