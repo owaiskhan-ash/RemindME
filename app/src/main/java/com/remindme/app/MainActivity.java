@@ -20,12 +20,15 @@ import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -72,7 +75,8 @@ public final class MainActivity extends Activity {
     private TextView navHomeLabel;
     private TextView navHistoryLabel;
     private TextView navSettingsLabel;
-    private RadioGroup languageGroup;
+    private View appRoot;
+    private Spinner languageSpinner;
     private RadioGroup alarmSoundGroup;
     private Switch darkModeSwitch;
 
@@ -81,6 +85,10 @@ public final class MainActivity extends Activity {
     private AppPreferences preferences;
     private int selectedScreen = SCREEN_HOME;
     private boolean stateReceiverRegistered;
+    // Prevent widget setup and duplicate callbacks from repeatedly recreating
+    // the activity. This is especially important after locale changes.
+    private boolean syncingSettings;
+    private boolean recreatePending;
 
     private final BroadcastReceiver reminderStateReceiver = new BroadcastReceiver() {
         @Override
@@ -100,9 +108,10 @@ public final class MainActivity extends Activity {
         configuration.uiMode = (configuration.uiMode & ~Configuration.UI_MODE_NIGHT_MASK)
                 | (savedPreferences.isDarkMode()
                 ? Configuration.UI_MODE_NIGHT_YES : Configuration.UI_MODE_NIGHT_NO);
-        Locale locale = savedPreferences.getAppLocale();
-        configuration.setLocale(locale);
-        configuration.setLayoutDirection(locale);
+        // Only override resource qualifiers here. Applying layout direction to
+        // the activity configuration can repeatedly trigger configuration
+        // recreation on some Android builds; the root view handles RTL below.
+        configuration.setLocale(savedPreferences.getAppLocale());
         super.attachBaseContext(newBase.createConfigurationContext(configuration));
     }
 
@@ -133,6 +142,7 @@ public final class MainActivity extends Activity {
     }
 
     private void bindViews() {
+        appRoot = findViewById(R.id.app_root);
         reminderInput = findViewById(R.id.reminder_input);
         previewText = findViewById(R.id.preview_text);
         previewHint = findViewById(R.id.preview_hint);
@@ -153,7 +163,7 @@ public final class MainActivity extends Activity {
         navHomeLabel = findViewById(R.id.nav_home_label);
         navHistoryLabel = findViewById(R.id.nav_history_label);
         navSettingsLabel = findViewById(R.id.nav_settings_label);
-        languageGroup = findViewById(R.id.language_group);
+        languageSpinner = findViewById(R.id.language_spinner);
         alarmSoundGroup = findViewById(R.id.alarm_sound_group);
         darkModeSwitch = findViewById(R.id.dark_mode_switch);
     }
@@ -187,54 +197,126 @@ public final class MainActivity extends Activity {
             @Override public void onClick(View view) { showScreen(SCREEN_SETTINGS); }
         });
 
-        languageGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override public void onCheckedChanged(RadioGroup group, int checkedId) {
-                String selectedLanguage = languageChoiceForRadio(checkedId);
+        configureLanguageDropdown();
+        // Establish the saved item before the listener is attached so first
+        // layout can never interpret the English default as a user change.
+        languageSpinner.setSelection(languagePosition(preferences.getLanguageChoice()), false);
+        languageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (syncingSettings) return;
+                String selectedLanguage = languageChoiceForPosition(position);
                 if (preferences.getLanguageChoice().equals(selectedLanguage)) return;
                 preferences.setLanguageChoice(selectedLanguage);
-                recreate();
+                requestStableRecreate();
             }
+
+            @Override public void onNothingSelected(AdapterView<?> parent) { }
         });
         alarmSoundGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (syncingSettings) return;
                 preferences.setSoundChoice(checkedId == R.id.remindme_alarm_radio
                         ? AppPreferences.SOUND_REMINDME : AppPreferences.SOUND_DEVICE);
             }
         });
         darkModeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (preferences.isDarkMode() == isChecked) return;
+                if (syncingSettings || preferences.isDarkMode() == isChecked) return;
                 preferences.setDarkMode(isChecked);
-                recreate();
+                requestStableRecreate();
             }
         });
     }
 
+    private void configureLanguageDropdown() {
+        String[] labels = new String[]{
+                getString(R.string.language_english),
+                getString(R.string.language_indonesian),
+                getString(R.string.language_spanish),
+                getString(R.string.language_portuguese),
+                getString(R.string.language_hindi),
+                getString(R.string.language_arabic),
+                getString(R.string.language_chinese)
+        };
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, labels) {
+            @Override public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                styleLanguageSpinnerItem(view);
+                return view;
+            }
+
+            @Override public View getDropDownView(int position, View convertView, ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                styleLanguageSpinnerItem(view);
+                return view;
+            }
+        };
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        languageSpinner.setAdapter(adapter);
+    }
+
+    private void styleLanguageSpinnerItem(View item) {
+        if (!(item instanceof TextView)) return;
+        TextView label = (TextView) item;
+        label.setTextColor(getColor(R.color.ink));
+        label.setTextSize(15);
+        label.setGravity(Gravity.CENTER_VERTICAL | Gravity.START);
+        label.setPadding(dp(12), dp(8), dp(12), dp(8));
+    }
+
     private void syncSettingsControls() {
-        languageGroup.check(languageRadioId(preferences.getLanguageChoice()));
-        alarmSoundGroup.check(preferences.usesRemindMeSound()
-                ? R.id.remindme_alarm_radio : R.id.device_alarm_radio);
-        darkModeSwitch.setChecked(preferences.isDarkMode());
+        syncingSettings = true;
+        try {
+            languageSpinner.setSelection(languagePosition(preferences.getLanguageChoice()), false);
+            alarmSoundGroup.check(preferences.usesRemindMeSound()
+                    ? R.id.remindme_alarm_radio : R.id.device_alarm_radio);
+            darkModeSwitch.setChecked(preferences.isDarkMode());
+            applySavedLayoutDirection();
+        } finally {
+            syncingSettings = false;
+        }
     }
 
-    private String languageChoiceForRadio(int checkedId) {
-        if (checkedId == R.id.indonesian_language_radio) return AppPreferences.LANGUAGE_INDONESIAN;
-        if (checkedId == R.id.spanish_language_radio) return AppPreferences.LANGUAGE_SPANISH;
-        if (checkedId == R.id.portuguese_language_radio) return AppPreferences.LANGUAGE_PORTUGUESE;
-        if (checkedId == R.id.hindi_language_radio) return AppPreferences.LANGUAGE_HINDI;
-        if (checkedId == R.id.arabic_language_radio) return AppPreferences.LANGUAGE_ARABIC;
-        if (checkedId == R.id.chinese_language_radio) return AppPreferences.LANGUAGE_CHINESE;
-        return AppPreferences.LANGUAGE_ENGLISH;
+    private String languageChoiceForPosition(int position) {
+        switch (position) {
+            case 1: return AppPreferences.LANGUAGE_INDONESIAN;
+            case 2: return AppPreferences.LANGUAGE_SPANISH;
+            case 3: return AppPreferences.LANGUAGE_PORTUGUESE;
+            case 4: return AppPreferences.LANGUAGE_HINDI;
+            case 5: return AppPreferences.LANGUAGE_ARABIC;
+            case 6: return AppPreferences.LANGUAGE_CHINESE;
+            default: return AppPreferences.LANGUAGE_ENGLISH;
+        }
     }
 
-    private int languageRadioId(String language) {
-        if (AppPreferences.LANGUAGE_INDONESIAN.equals(language)) return R.id.indonesian_language_radio;
-        if (AppPreferences.LANGUAGE_SPANISH.equals(language)) return R.id.spanish_language_radio;
-        if (AppPreferences.LANGUAGE_PORTUGUESE.equals(language)) return R.id.portuguese_language_radio;
-        if (AppPreferences.LANGUAGE_HINDI.equals(language)) return R.id.hindi_language_radio;
-        if (AppPreferences.LANGUAGE_ARABIC.equals(language)) return R.id.arabic_language_radio;
-        if (AppPreferences.LANGUAGE_CHINESE.equals(language)) return R.id.chinese_language_radio;
-        return R.id.english_language_radio;
+    private int languagePosition(String language) {
+        if (AppPreferences.LANGUAGE_INDONESIAN.equals(language)) return 1;
+        if (AppPreferences.LANGUAGE_SPANISH.equals(language)) return 2;
+        if (AppPreferences.LANGUAGE_PORTUGUESE.equals(language)) return 3;
+        if (AppPreferences.LANGUAGE_HINDI.equals(language)) return 4;
+        if (AppPreferences.LANGUAGE_ARABIC.equals(language)) return 5;
+        if (AppPreferences.LANGUAGE_CHINESE.equals(language)) return 6;
+        return 0;
+    }
+
+    private void applySavedLayoutDirection() {
+        if (appRoot == null) return;
+        int direction = preferences.usesRightToLeftLayout()
+                ? View.LAYOUT_DIRECTION_RTL : View.LAYOUT_DIRECTION_LTR;
+        appRoot.setLayoutDirection(direction);
+        languageSpinner.setLayoutDirection(direction);
+    }
+
+    private void requestStableRecreate() {
+        if (recreatePending || isFinishing()) return;
+        recreatePending = true;
+        View root = appRoot == null ? getWindow().getDecorView() : appRoot;
+        root.post(new Runnable() {
+            @Override public void run() {
+                if (!isFinishing() && !isDestroyed()) recreate();
+            }
+        });
     }
 
     @SuppressWarnings("deprecation")

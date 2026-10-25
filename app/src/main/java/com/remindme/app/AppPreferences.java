@@ -62,6 +62,11 @@ public final class AppPreferences {
         return !LANGUAGE_ENGLISH.equals(getLanguageChoice());
     }
 
+    /** Arabic is the only currently offered right-to-left app language. */
+    public boolean usesRightToLeftLayout() {
+        return LANGUAGE_ARABIC.equals(getLanguageChoice());
+    }
+
     public void setLanguageChoice(String choice) {
         preferences.edit().putString(KEY_LANGUAGE, normalizeLanguage(choice)).apply();
     }
@@ -81,9 +86,7 @@ public final class AppPreferences {
     /** Gives receivers and notifications the saved in-app language as well. */
     public Context localizedContext(Context context) {
         Configuration configuration = new Configuration(context.getResources().getConfiguration());
-        Locale locale = getAppLocale();
-        configuration.setLocale(locale);
-        configuration.setLayoutDirection(locale);
+        configuration.setLocale(getAppLocale());
         return context.createConfigurationContext(configuration);
     }
 

@@ -18,8 +18,8 @@ RemindME turns those phrases into a scheduled Android alarm. It also corrects co
 
 ## What the app does
 
-- Offers persistent in-app language choices for **English, Bahasa Indonesia, Español, Português, हिन्दी, العربية, and 简体中文**
-- Localizes the app interface, alarm notifications, Snooze and Mark done actions in every offered language; Arabic also receives right-to-left layout direction
+- Offers persistent in-app language choices in a compact Settings dropdown for **English, Bahasa Indonesia, Español, Português, हिन्दी, العربية, and 简体中文**
+- Localizes the app interface, alarm notifications, Snooze and Mark done actions in every offered language; Arabic receives an in-view right-to-left layout direction without a configuration-recreation loop
 - Parses common reminder phrases in all seven languages, including dates, weekdays, clock times, day periods, and relative durations such as `mañana a las 9`, `amanhã às 18:30`, `कल शाम 6 बजे`, `غدا الساعة 9 مساء`, `明天上午9点`, `besok jam 9 pagi`, and `in 10 minutes`
 - Requires an explicit date and time before scheduling; the preview clearly asks for any missing detail instead of silently guessing a time
 - Schedules a device alarm with `AlarmManager`, so it can arrive after the app is closed
@@ -54,7 +54,7 @@ The Gradle release build is signed with the standard debug key so it is installa
 
 ## CI release artifact
 
-`.github/workflows/android-release.yml` builds and uploads `RemindME-v1.0.5-release-apk` on every push to this Arena branch. The workflow uses JDK 17 and Android API 35.
+`.github/workflows/android-release.yml` builds and uploads `RemindME-v1.0.6-release-apk` on every push to this Arena branch. The workflow uses JDK 17 and Android API 35.
 
 ## Important Android behavior
 
