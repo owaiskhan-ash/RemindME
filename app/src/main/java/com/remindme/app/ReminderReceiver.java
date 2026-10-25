@@ -1,6 +1,5 @@
 package com.remindme.app;
 
-import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -20,6 +19,7 @@ import android.os.Build;
 public final class ReminderReceiver extends BroadcastReceiver {
     public static final String CHANNEL_ID = "gentle_reminders";
     private static final String CHANNEL_NAME = "Gentle reminders";
+    private static final String POST_NOTIFICATIONS = "android.permission.POST_NOTIFICATIONS";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -77,8 +77,8 @@ public final class ReminderReceiver extends BroadcastReceiver {
     }
 
     private static void showReminder(Context context, Reminder reminder) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
-                && context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS)
+        if (Build.VERSION.SDK_INT >= 33
+                && context.checkSelfPermission(POST_NOTIFICATIONS)
                 != PackageManager.PERMISSION_GRANTED) {
             return;
         }

@@ -1,6 +1,5 @@
 package com.remindme.app;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.content.Intent;
@@ -33,6 +32,9 @@ import java.util.UUID;
 /** The entire, intentionally focused Android experience: write, confirm, and be reminded. */
 public final class MainActivity extends Activity {
     private static final int REQUEST_NOTIFICATIONS = 201;
+    // Kept as a literal so the app can be compiled against Android 12 while still
+    // requesting the Android 13 notification runtime permission on newer phones.
+    private static final String POST_NOTIFICATIONS = "android.permission.POST_NOTIFICATIONS";
 
     private EditText reminderInput;
     private TextView previewText;
@@ -70,9 +72,15 @@ public final class MainActivity extends Activity {
             @Override public void afterTextChanged(Editable s) { }
         });
 
-        findViewById(R.id.set_reminder_button).setOnClickListener(view -> saveReminder());
-        permissionButton.setOnClickListener(view -> requestRequiredAccess());
-        clearCompletedButton.setOnClickListener(view -> clearCompleted());
+        findViewById(R.id.set_reminder_button).setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) { saveReminder(); }
+        });
+        permissionButton.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) { requestRequiredAccess(); }
+        });
+        clearCompletedButton.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) { clearCompleted(); }
+        });
 
         updatePreview();
         refreshReminderList();
@@ -192,14 +200,18 @@ public final class MainActivity extends Activity {
         actionsParams.topMargin = dp(7);
 
         Button done = compactButton(reminder.completed ? "Undo" : "Done", R.drawable.bg_done_button, getColor(R.color.sage_dark));
-        done.setOnClickListener(view -> toggleCompleted(reminder));
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) { toggleCompleted(reminder); }
+        });
         actions.addView(done, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, dp(36)));
 
         Button remove = compactButton("Delete", 0, getColor(R.color.danger));
         remove.setBackgroundColor(0x00000000);
         LinearLayout.LayoutParams removeParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, dp(36));
         removeParams.leftMargin = dp(2);
-        remove.setOnClickListener(view -> deleteReminder(reminder));
+        remove.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) { deleteReminder(reminder); }
+        });
         actions.addView(remove, removeParams);
         card.addView(actions, actionsParams);
         return card;
@@ -208,7 +220,7 @@ public final class MainActivity extends Activity {
     private Button compactButton(String label, int background, int textColor) {
         Button button = new Button(this);
         button.setText(label);
-        button.setTextAllCaps(false);
+        button.setTransformationMethod(null);
         button.setTextColor(textColor);
         button.setTextSize(12);
         button.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
@@ -265,14 +277,14 @@ public final class MainActivity extends Activity {
     }
 
     private void requestNotificationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQUEST_NOTIFICATIONS);
+        if (Build.VERSION.SDK_INT >= 33) {
+            requestPermissions(new String[]{POST_NOTIFICATIONS}, REQUEST_NOTIFICATIONS);
         }
     }
 
     private boolean needsNotificationPermission() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
-                && checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED;
+        return Build.VERSION.SDK_INT >= 33
+                && checkSelfPermission(POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED;
     }
 
     private boolean needsExactAlarmAccess() {

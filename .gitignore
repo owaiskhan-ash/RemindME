@@ -1,4 +1,5 @@
 # Android / Gradle
+.tools/
 .gradle/
 build/
 **/build/
