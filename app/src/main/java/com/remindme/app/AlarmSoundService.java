@@ -13,23 +13,25 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 
 /**
  * Plays due reminders through Android's dedicated alarm stream.
  *
- * Ring/silent mode controls the ringtone and notification streams, not the alarm
- * stream, so a device in silent mode still plays a reminder as long as its alarm
- * volume is not set to zero. Do Not Disturb remains an explicit user-controlled
- * Android setting and is handled by the optional policy-access path in the UI.
+ * Ring/silent mode controls ringtone and notification streams, not the alarm
+ * stream, so a device in silent mode still plays a reminder while its alarm
+ * volume is nonzero. Do Not Disturb remains an explicit user-controlled Android
+ * setting. The optional RemindME sound safely falls back to the device alarm.
  */
 public final class AlarmSoundService extends Service {
     private static final String ACTION_START = "com.remindme.app.START_ALARM_SOUND";
     private static final long MAX_RING_DURATION_MS = 60_000L;
 
-    private final Handler handler = new Handler();
+    private final Handler handler = new Handler(Looper.getMainLooper());
     private MediaPlayer player;
     private AudioManager audioManager;
     private int activeNotificationId = 0;
+    private boolean remoteFallbackUsed;
     private final Runnable stopAfterTimeout = new Runnable() {
         @Override
         public void run() {
@@ -100,32 +102,80 @@ public final class AlarmSoundService extends Service {
     private void startAlarmTone() {
         stopAlarmTone();
         requestAlarmAudioFocus();
+        remoteFallbackUsed = false;
+        if (new AppPreferences(this).usesRemindMeSound()) {
+            startRemoteAlarmTone();
+        } else {
+            startDeviceAlarmTone();
+        }
+    }
+
+    private void startRemoteAlarmTone() {
+        startTone(Uri.parse(AppPreferences.REMINDME_ALARM_URL), true);
+    }
+
+    private void startDeviceAlarmTone() {
         Uri alarmTone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         if (alarmTone == null) {
             alarmTone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         }
-        if (alarmTone == null) return;
+        if (alarmTone == null) {
+            abandonAlarmAudioFocus();
+            return;
+        }
+        startTone(alarmTone, false);
+    }
 
+    private void startTone(Uri toneUri, final boolean isRemoteTone) {
+        MediaPlayer nextPlayer = new MediaPlayer();
         try {
-            MediaPlayer nextPlayer = new MediaPlayer();
             nextPlayer.setAudioAttributes(new AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_ALARM)
                     .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                     .build());
-            nextPlayer.setDataSource(getApplicationContext(), alarmTone);
+            nextPlayer.setDataSource(getApplicationContext(), toneUri);
             nextPlayer.setLooping(true);
             nextPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(MediaPlayer preparedPlayer) {
-                    preparedPlayer.start();
+                    if (player != preparedPlayer) return;
+                    try {
+                        preparedPlayer.start();
+                    } catch (IllegalStateException ignored) {
+                        handlePlaybackFailure(preparedPlayer, isRemoteTone);
+                    }
                 }
             });
-            nextPlayer.prepareAsync();
+            nextPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+                @Override
+                public boolean onError(MediaPlayer failedPlayer, int what, int extra) {
+                    handlePlaybackFailure(failedPlayer, isRemoteTone);
+                    return true;
+                }
+            });
             player = nextPlayer;
+            nextPlayer.prepareAsync();
         } catch (Exception ignored) {
-            // The notification stays available with Snooze and Mark done even if
-            // a device has no usable system alarm tone configured.
-            stopAlarmTone();
+            releasePlayer(nextPlayer);
+            if (player == nextPlayer) player = null;
+            if (isRemoteTone && !remoteFallbackUsed) {
+                remoteFallbackUsed = true;
+                startDeviceAlarmTone();
+            } else {
+                abandonAlarmAudioFocus();
+            }
+        }
+    }
+
+    private void handlePlaybackFailure(MediaPlayer failedPlayer, boolean wasRemoteTone) {
+        if (player != failedPlayer) return;
+        player = null;
+        releasePlayer(failedPlayer);
+        if (wasRemoteTone && !remoteFallbackUsed) {
+            remoteFallbackUsed = true;
+            startDeviceAlarmTone();
+        } else {
+            abandonAlarmAudioFocus();
         }
     }
 
@@ -141,21 +191,35 @@ public final class AlarmSoundService extends Service {
         }
     }
 
-    @SuppressWarnings("deprecation")
-    private void stopAlarmTone() {
-        if (player != null) {
-            try {
-                if (player.isPlaying()) player.stop();
-            } catch (IllegalStateException ignored) {
-                // A player that failed while preparing can be released safely.
-            }
-            player.reset();
-            player.release();
-            player = null;
+    private void releasePlayer(MediaPlayer target) {
+        if (target == null) return;
+        try {
+            if (target.isPlaying()) target.stop();
+        } catch (IllegalStateException ignored) {
+            // A player that failed while preparing can still be released safely.
         }
+        try {
+            target.reset();
+        } catch (IllegalStateException ignored) {
+            // Release below is still valid after a media-server error.
+        }
+        target.release();
+    }
+
+    @SuppressWarnings("deprecation")
+    private void abandonAlarmAudioFocus() {
         if (audioManager != null) {
             audioManager.abandonAudioFocus(null);
             audioManager = null;
         }
+    }
+
+    private void stopAlarmTone() {
+        if (player != null) {
+            MediaPlayer currentPlayer = player;
+            player = null;
+            releasePlayer(currentPlayer);
+        }
+        abandonAlarmAudioFocus();
     }
 }

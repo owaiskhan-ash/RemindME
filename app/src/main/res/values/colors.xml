@@ -9,7 +9,14 @@
     <color name="sage">#526B5D</color>
     <color name="sage_dark">#3E544A</color>
     <color name="sage_light">#DCE8DF</color>
+    <color name="sage_pressed">#D1E0D5</color>
+    <color name="primary_pressed">#3D5449</color>
+    <color name="done_button">#EDF4EC</color>
+    <color name="done_pressed">#E1EDE2</color>
     <color name="outline">#DFE3DE</color>
+    <color name="dock_inactive">#7B8580</color>
+    <color name="dock_active">#3E544A</color>
+    <color name="dock_active_bg">#E3ECE5</color>
     <color name="white">#FFFFFF</color>
     <color name="danger">#A85555</color>
 </resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="surface">#101512</color>
+    <color name="card">#19201C</color>
+    <color name="preview">#203126</color>
+    <color name="ink">#F0F4EE</color>
+    <color name="ink_muted">#B4BDB7</color>
+    <color name="ink_hint">#8C9690</color>
+    <color name="sage">#71917C</color>
+    <color name="sage_dark">#C0DBC6</color>
+    <color name="sage_light">#294134</color>
+    <color name="sage_pressed">#344D3D</color>
+    <color name="primary_pressed">#577461</color>
+    <color name="done_button">#24382B</color>
+    <color name="done_pressed">#2E4734</color>
+    <color name="outline">#2D3932</color>
+    <color name="dock_inactive">#9BA69F</color>
+    <color name="dock_active">#C0DBC6</color>
+    <color name="dock_active_bg">#294334</color>
+    <color name="white">#FFFFFF</color>
+    <color name="danger">#F09A9A</color>
+</resources>

@@ -17,6 +17,8 @@ import android.os.Build;
 public final class ReminderReceiver extends BroadcastReceiver {
     // A new channel ID keeps the alarm-stream behavior distinct from older builds.
     public static final String CHANNEL_ID = "reminder_alarms_v2";
+    public static final String ACTION_REMINDER_STATE_CHANGED =
+            "com.remindme.app.REMINDER_STATE_CHANGED";
     private static final String CHANNEL_NAME = "Reminder alarms";
     private static final String POST_NOTIFICATIONS = "android.permission.POST_NOTIFICATIONS";
 
@@ -38,6 +40,7 @@ public final class ReminderReceiver extends BroadcastReceiver {
             store.update(reminder);
             scheduler.schedule(reminder);
             cancelNotification(context, reminder);
+            dispatchStateChanged(context, reminder.id);
             return;
         }
 
@@ -48,12 +51,14 @@ public final class ReminderReceiver extends BroadcastReceiver {
             store.update(reminder);
             scheduler.cancel(reminder);
             cancelNotification(context, reminder);
+            dispatchStateChanged(context, reminder.id);
             return;
         }
 
         if (!ReminderScheduler.ACTION_FIRE.equals(action) || reminder.completed) return;
         reminder.notified = true;
         store.update(reminder);
+        dispatchStateChanged(context, reminder.id);
         showReminder(context, reminder);
         try {
             // A foreground service keeps the looping alarm stream alive after this
@@ -99,6 +104,7 @@ public final class ReminderReceiver extends BroadcastReceiver {
         manager.createNotificationChannel(channel);
     }
 
+    @SuppressWarnings("deprecation")
     static Notification buildReminderNotification(Context context, Reminder reminder, boolean alarmActive) {
         createNotificationChannel(context);
         ReminderScheduler scheduler = new ReminderScheduler(context);
@@ -139,6 +145,13 @@ public final class ReminderReceiver extends BroadcastReceiver {
                 .addAction(snoozeAction)
                 .addAction(completeAction)
                 .build();
+    }
+
+    private static void dispatchStateChanged(Context context, String reminderId) {
+        Intent changed = new Intent(ACTION_REMINDER_STATE_CHANGED)
+                .setPackage(context.getPackageName())
+                .putExtra(ReminderScheduler.EXTRA_REMINDER_ID, reminderId);
+        context.sendBroadcast(changed);
     }
 
     private static void showReminder(Context context, Reminder reminder) {
