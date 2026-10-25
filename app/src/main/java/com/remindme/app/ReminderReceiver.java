@@ -15,11 +15,10 @@ import android.os.Build;
 
 /** Delivers the alarm notification and its Snooze/Mark done actions. */
 public final class ReminderReceiver extends BroadcastReceiver {
-    // A new channel ID keeps the alarm-stream behavior distinct from older builds.
-    public static final String CHANNEL_ID = "reminder_alarms_v2";
+    // A new ID gives language-aware alarms their own app-managed notification channel.
+    public static final String CHANNEL_ID = "reminder_alarms_v3";
     public static final String ACTION_REMINDER_STATE_CHANGED =
             "com.remindme.app.REMINDER_STATE_CHANGED";
-    private static final String CHANNEL_NAME = "Reminder alarms";
     private static final String POST_NOTIFICATIONS = "android.permission.POST_NOTIFICATIONS";
 
     @Override
@@ -72,6 +71,7 @@ public final class ReminderReceiver extends BroadcastReceiver {
 
     public static void createNotificationChannel(Context context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return;
+        Context textContext = new AppPreferences(context).localizedContext(context);
         NotificationManager manager = context.getSystemService(NotificationManager.class);
         boolean hasDndAccess = manager.isNotificationPolicyAccessGranted();
         NotificationChannel existing = manager.getNotificationChannel(CHANNEL_ID);
@@ -91,10 +91,10 @@ public final class ReminderReceiver extends BroadcastReceiver {
                 .build();
         NotificationChannel channel = new NotificationChannel(
                 CHANNEL_ID,
-                CHANNEL_NAME,
+                textContext.getString(R.string.alarm_channel_name),
                 NotificationManager.IMPORTANCE_HIGH
         );
-        channel.setDescription("Full-volume reminder alarms with Snooze and Mark done actions.");
+        channel.setDescription(textContext.getString(R.string.alarm_channel_description));
         channel.enableVibration(true);
         channel.setVibrationPattern(new long[]{0, 160, 110, 160});
         // AlarmSoundService owns the audible tone to avoid duplicate sounds. The
@@ -106,6 +106,7 @@ public final class ReminderReceiver extends BroadcastReceiver {
 
     @SuppressWarnings("deprecation")
     static Notification buildReminderNotification(Context context, Reminder reminder, boolean alarmActive) {
+        Context textContext = new AppPreferences(context).localizedContext(context);
         createNotificationChannel(context);
         ReminderScheduler scheduler = new ReminderScheduler(context);
         Intent openApp = new Intent(context, MainActivity.class)
@@ -120,21 +121,25 @@ public final class ReminderReceiver extends BroadcastReceiver {
 
         Notification.Action snoozeAction = new Notification.Action.Builder(
                 Icon.createWithResource(context, R.drawable.ic_snooze),
-                context.getString(R.string.snooze_ten_minutes),
+                textContext.getString(R.string.snooze_ten_minutes),
                 scheduler.actionPendingIntent(reminder, ReminderScheduler.ACTION_SNOOZE)
         ).build();
         Notification.Action completeAction = new Notification.Action.Builder(
                 Icon.createWithResource(context, R.drawable.ic_complete),
-                context.getString(R.string.mark_done),
+                textContext.getString(R.string.mark_done),
                 scheduler.actionPendingIntent(reminder, ReminderScheduler.ACTION_COMPLETE)
         ).build();
 
+        String alarmText = ReminderText.clean(reminder.title);
+        if (alarmText.isEmpty()) alarmText = textContext.getString(R.string.default_reminder_title);
         return new Notification.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_stat_re)
                 .setColor(Color.rgb(62, 84, 74))
-                .setContentTitle(alarmActive ? "RemindME alarm" : context.getString(R.string.notification_title))
-                .setContentText(reminder.title)
-                .setStyle(new Notification.BigTextStyle().bigText(reminder.title))
+                .setContentTitle(alarmActive
+                        ? textContext.getString(R.string.alarm_active_title)
+                        : textContext.getString(R.string.notification_title))
+                .setContentText(alarmText)
+                .setStyle(new Notification.BigTextStyle().bigText(alarmText))
                 .setContentIntent(contentIntent)
                 .setAutoCancel(!alarmActive)
                 .setOngoing(alarmActive)

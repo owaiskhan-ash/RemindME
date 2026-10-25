@@ -7,8 +7,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Configuration;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -44,7 +44,8 @@ public final class MainActivity extends Activity {
     private static final int SCREEN_HOME = 0;
     private static final int SCREEN_HISTORY = 1;
     private static final int SCREEN_SETTINGS = 2;
-    // Available from API 26. This is Context.RECEIVER_NOT_EXPORTED on newer SDKs.
+    // The registerReceiver flags overload is available from API 26. This literal
+    // is Context.RECEIVER_NOT_EXPORTED on newer SDKs.
     private static final int RECEIVER_NOT_EXPORTED = 0x4;
     // Kept as a literal so the app compiles against Android 12 while still
     // requesting the Android 13 notification runtime permission on newer phones.
@@ -71,6 +72,7 @@ public final class MainActivity extends Activity {
     private TextView navHomeLabel;
     private TextView navHistoryLabel;
     private TextView navSettingsLabel;
+    private RadioGroup languageGroup;
     private RadioGroup alarmSoundGroup;
     private Switch darkModeSwitch;
 
@@ -91,20 +93,19 @@ public final class MainActivity extends Activity {
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        // Resource qualifiers follow this persisted choice too, rather than the
-        // phone-wide setting, so the in-app toggle always has an immediate result.
+        // Resource qualifiers follow the saved app preferences, rather than only
+        // phone-wide settings, so both language and dark-mode choices persist.
         AppPreferences savedPreferences = new AppPreferences(newBase);
         Configuration configuration = new Configuration(newBase.getResources().getConfiguration());
         configuration.uiMode = (configuration.uiMode & ~Configuration.UI_MODE_NIGHT_MASK)
                 | (savedPreferences.isDarkMode()
                 ? Configuration.UI_MODE_NIGHT_YES : Configuration.UI_MODE_NIGHT_NO);
+        configuration.setLocale(savedPreferences.getAppLocale());
         super.attachBaseContext(newBase.createConfigurationContext(configuration));
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Pick the saved palette before the view hierarchy is inflated. Dark is
-        // the first-run default, while light remains an explicit user choice.
         preferences = new AppPreferences(this);
         setTheme(preferences.isDarkMode()
                 ? R.style.Theme_RemindME_Dark
@@ -150,6 +151,7 @@ public final class MainActivity extends Activity {
         navHomeLabel = findViewById(R.id.nav_home_label);
         navHistoryLabel = findViewById(R.id.nav_history_label);
         navSettingsLabel = findViewById(R.id.nav_settings_label);
+        languageGroup = findViewById(R.id.language_group);
         alarmSoundGroup = findViewById(R.id.alarm_sound_group);
         darkModeSwitch = findViewById(R.id.dark_mode_switch);
     }
@@ -183,6 +185,16 @@ public final class MainActivity extends Activity {
             @Override public void onClick(View view) { showScreen(SCREEN_SETTINGS); }
         });
 
+        languageGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(RadioGroup group, int checkedId) {
+                boolean selectedIndonesian = checkedId == R.id.indonesian_language_radio;
+                if (preferences.usesIndonesian() == selectedIndonesian) return;
+                preferences.setLanguageChoice(selectedIndonesian
+                        ? AppPreferences.LANGUAGE_INDONESIAN
+                        : AppPreferences.LANGUAGE_ENGLISH);
+                recreate();
+            }
+        });
         alarmSoundGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override public void onCheckedChanged(RadioGroup group, int checkedId) {
                 preferences.setSoundChoice(checkedId == R.id.remindme_alarm_radio
@@ -199,6 +211,8 @@ public final class MainActivity extends Activity {
     }
 
     private void syncSettingsControls() {
+        languageGroup.check(preferences.usesIndonesian()
+                ? R.id.indonesian_language_radio : R.id.english_language_radio);
         alarmSoundGroup.check(preferences.usesRemindMeSound()
                 ? R.id.remindme_alarm_radio : R.id.device_alarm_radio);
         darkModeSwitch.setChecked(preferences.isDarkMode());
@@ -241,8 +255,6 @@ public final class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
         if (store != null) {
-            // Recreate the dedicated channel after returning from Android's DND
-            // access screen, so it can bypass DND after explicit user approval.
             ReminderReceiver.createNotificationChannel(this);
             refreshReminderLists();
             updateAccessCard();
@@ -291,25 +303,39 @@ public final class MainActivity extends Activity {
         }
 
         ReminderParser.ParsedReminder parsed = ReminderParser.parse(phrase);
-        previewText.setText(parsed.title + "  ·  " + formatWhen(parsed.triggerAt));
-        previewHint.setText(parsed.timeWasInferred
-                ? "No time mentioned — 9:00 AM is the default."
-                : "Ready to schedule.");
+        String title = displayTitle(parsed.title);
+        if (!parsed.isReadyToSchedule()) {
+            previewText.setText(title);
+            previewHint.setText(scheduleDetailsMessage(parsed));
+            previewHint.setVisibility(View.VISIBLE);
+            return;
+        }
+
+        previewText.setText(getString(R.string.preview_scheduled, title, formatWhen(parsed.triggerAt)));
+        previewHint.setText(R.string.preview_ready);
         previewHint.setVisibility(View.VISIBLE);
     }
 
     private void saveReminder() {
         String phrase = reminderInput.getText().toString().trim();
         if (phrase.isEmpty()) {
-            reminderInput.setError("Write a reminder first");
+            reminderInput.setError(getString(R.string.write_reminder_first));
             reminderInput.requestFocus();
             return;
         }
 
         ReminderParser.ParsedReminder parsed = ReminderParser.parse(phrase);
+        if (!parsed.isReadyToSchedule()) {
+            String prompt = scheduleDetailsMessage(parsed);
+            reminderInput.setError(prompt);
+            reminderInput.requestFocus();
+            Toast.makeText(this, prompt, Toast.LENGTH_LONG).show();
+            return;
+        }
+
         Reminder reminder = new Reminder(
                 UUID.randomUUID().toString(),
-                parsed.title,
+                displayTitle(parsed.title),
                 phrase,
                 parsed.triggerAt
         );
@@ -318,13 +344,25 @@ public final class MainActivity extends Activity {
 
         reminderInput.setText("");
         refreshReminderLists();
-        Toast.makeText(this, "Alarm set for " + formatWhen(reminder.triggerAt), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getString(R.string.alarm_set_for, formatWhen(reminder.triggerAt)),
+                Toast.LENGTH_LONG).show();
 
         if (needsNotificationPermission()) {
             requestNotificationPermission();
         } else {
             updateAccessCard();
         }
+    }
+
+    private String scheduleDetailsMessage(ReminderParser.ParsedReminder parsed) {
+        if (!parsed.hasDate && !parsed.hasTime) return getString(R.string.missing_date_and_time);
+        if (!parsed.hasDate) return getString(R.string.missing_date);
+        return getString(R.string.missing_time);
+    }
+
+    private String displayTitle(String rawTitle) {
+        String title = ReminderText.clean(rawTitle);
+        return title.isEmpty() ? getString(R.string.default_reminder_title) : title;
     }
 
     private void refreshReminderLists() {
@@ -346,12 +384,10 @@ public final class MainActivity extends Activity {
         }
 
         if (!hasUpcoming) {
-            remindersContainer.addView(createEmptyCard(
-                    "Nothing scheduled yet. Your next gentle nudge will appear here."));
+            remindersContainer.addView(createEmptyCard(getString(R.string.empty_upcoming)));
         }
         if (!hasCompleted) {
-            historyContainer.addView(createEmptyCard(
-                    "No previous reminders yet. Mark one done and it will live here."));
+            historyContainer.addView(createEmptyCard(getString(R.string.empty_history)));
         }
         clearHistoryButton.setVisibility(hasCompleted ? View.VISIBLE : View.GONE);
     }
@@ -372,14 +408,10 @@ public final class MainActivity extends Activity {
 
     private View createUpcomingCard(final Reminder reminder) {
         LinearLayout card = createCardShell(false);
-
-        TextView title = reminderTitle(reminder.title, false);
-        card.addView(title, matchWidthWrap());
+        card.addView(reminderTitle(reminder.title, false), matchWidthWrap());
 
         TextView when = new TextView(this);
-        when.setText(reminder.notified
-                ? "Due now · Snooze from the alarm or mark it done."
-                : formatWhen(reminder.triggerAt));
+        when.setText(reminder.notified ? getString(R.string.due_now_action) : formatWhen(reminder.triggerAt));
         when.setTextSize(12);
         when.setTextColor(getColor(R.color.ink_muted));
         LinearLayout.LayoutParams whenParams = matchWidthWrap();
@@ -392,13 +424,14 @@ public final class MainActivity extends Activity {
         LinearLayout.LayoutParams actionsParams = matchWidthWrap();
         actionsParams.topMargin = dp(7);
 
-        Button done = compactButton("Mark done", R.drawable.bg_done_button, getColor(R.color.sage_dark));
+        Button done = compactButton(getString(R.string.button_mark_done), R.drawable.bg_done_button,
+                getColor(R.color.sage_dark));
         done.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) { completeReminder(reminder); }
         });
         actions.addView(done, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, dp(36)));
 
-        Button remove = compactButton("Delete", 0, getColor(R.color.danger));
+        Button remove = compactButton(getString(R.string.button_delete), 0, getColor(R.color.danger));
         remove.setBackgroundColor(0x00000000);
         LinearLayout.LayoutParams removeParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, dp(36));
@@ -416,7 +449,7 @@ public final class MainActivity extends Activity {
         card.addView(reminderTitle(reminder.title, true), matchWidthWrap());
 
         TextView when = new TextView(this);
-        when.setText("Completed");
+        when.setText(R.string.completed);
         when.setTextSize(12);
         when.setTextColor(getColor(R.color.ink_muted));
         LinearLayout.LayoutParams whenParams = matchWidthWrap();
@@ -429,7 +462,7 @@ public final class MainActivity extends Activity {
         LinearLayout.LayoutParams actionsParams = matchWidthWrap();
         actionsParams.topMargin = dp(7);
 
-        Button remove = compactButton("Delete", 0, getColor(R.color.danger));
+        Button remove = compactButton(getString(R.string.button_delete), 0, getColor(R.color.danger));
         remove.setBackgroundColor(0x00000000);
         remove.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) { deleteReminder(reminder); }
@@ -453,7 +486,7 @@ public final class MainActivity extends Activity {
 
     private TextView reminderTitle(String titleText, boolean completed) {
         TextView title = new TextView(this);
-        title.setText(titleText);
+        title.setText(displayTitle(titleText));
         title.setTextSize(16);
         title.setTextColor(getColor(R.color.ink));
         title.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
@@ -484,7 +517,7 @@ public final class MainActivity extends Activity {
         dismissActiveAlarm(reminder);
         store.update(reminder);
         refreshReminderLists();
-        Toast.makeText(this, "Marked done — moved to Previous.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.done_moved_previous, Toast.LENGTH_SHORT).show();
     }
 
     private void deleteReminder(Reminder reminder) {
@@ -492,7 +525,7 @@ public final class MainActivity extends Activity {
         dismissActiveAlarm(reminder);
         store.delete(reminder.id);
         refreshReminderLists();
-        Toast.makeText(this, "Reminder deleted", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.reminder_deleted, Toast.LENGTH_SHORT).show();
     }
 
     private void dismissActiveAlarm(Reminder reminder) {
@@ -504,7 +537,7 @@ public final class MainActivity extends Activity {
     private void clearCompleted() {
         store.clearCompleted();
         refreshReminderLists();
-        Toast.makeText(this, "Completed reminders cleared", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.completed_cleared, Toast.LENGTH_SHORT).show();
     }
 
     private void requestRequiredAccess() {
@@ -518,7 +551,7 @@ public final class MainActivity extends Activity {
             try {
                 startActivity(intent);
             } catch (Exception ignored) {
-                Toast.makeText(this, "Open Android settings to allow alarms and reminders.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.open_alarm_settings, Toast.LENGTH_LONG).show();
             }
             return;
         }
@@ -526,11 +559,11 @@ public final class MainActivity extends Activity {
             try {
                 startActivity(new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS));
             } catch (Exception ignored) {
-                Toast.makeText(this, "Open Android settings to allow Do Not Disturb access.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.open_dnd_settings, Toast.LENGTH_LONG).show();
             }
             return;
         }
-        Toast.makeText(this, "Alarm alerts are ready, even when the ringer is silent.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.access_ready, Toast.LENGTH_SHORT).show();
     }
 
     private void requestNotificationPermission() {
@@ -558,20 +591,20 @@ public final class MainActivity extends Activity {
     private void updateAccessCard() {
         if (notificationMessage == null) return;
         if (needsNotificationPermission()) {
-            notificationMessage.setText("Turn on notifications to receive a clear alert and gentle alarm when it is due.");
-            permissionButton.setText("Enable");
+            notificationMessage.setText(R.string.access_notification_needed);
+            permissionButton.setText(R.string.enable);
             permissionButton.setVisibility(View.VISIBLE);
         } else if (needsExactAlarmAccess()) {
-            notificationMessage.setText("Notifications are on. Allow exact alarms for minute-accurate reminders.");
-            permissionButton.setText("Allow alarms");
+            notificationMessage.setText(R.string.access_exact_alarm_needed);
+            permissionButton.setText(R.string.allow_alarms);
             permissionButton.setVisibility(View.VISIBLE);
         } else if (needsDndAlarmAccess()) {
-            notificationMessage.setText("Alarm tones use the alarm volume, even when your phone is silent. Allow Do Not Disturb access only if you want alarms to break through DND too.");
-            permissionButton.setText("DND access");
+            notificationMessage.setText(R.string.access_dnd_needed);
+            permissionButton.setText(R.string.dnd_access);
             permissionButton.setVisibility(View.VISIBLE);
         } else {
-            notificationMessage.setText("Alarm alerts are ready. They use Android’s alarm stream, so ring/silent mode will not mute them.");
-            permissionButton.setText("On");
+            notificationMessage.setText(R.string.access_ready);
+            permissionButton.setText(R.string.access_on);
             permissionButton.setVisibility(View.VISIBLE);
         }
     }
@@ -581,9 +614,9 @@ public final class MainActivity extends Activity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_NOTIFICATIONS) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Notifications enabled", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.notifications_enabled, Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(this, "Reminders are saved. You can enable alerts later in Android settings.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.notifications_later, Toast.LENGTH_LONG).show();
             }
             updateAccessCard();
         }
@@ -595,12 +628,16 @@ public final class MainActivity extends Activity {
         tomorrow.add(Calendar.DAY_OF_YEAR, 1);
         Calendar target = Calendar.getInstance();
         target.setTimeInMillis(timestamp);
-        DateFormat timeFormat = new SimpleDateFormat("h:mm a", Locale.getDefault());
+        Locale locale = preferences.getAppLocale();
+        DateFormat timeFormat = new SimpleDateFormat(
+                preferences.usesIndonesian() ? "HH:mm" : "h:mm a", locale);
+        String time = timeFormat.format(new Date(timestamp));
 
-        if (sameDay(target, now)) return "Today at " + timeFormat.format(new Date(timestamp));
-        if (sameDay(target, tomorrow)) return "Tomorrow at " + timeFormat.format(new Date(timestamp));
-        DateFormat dateFormat = new SimpleDateFormat("EEE, MMM d", Locale.getDefault());
-        return dateFormat.format(new Date(timestamp)) + " at " + timeFormat.format(new Date(timestamp));
+        if (sameDay(target, now)) return getString(R.string.today_at, time);
+        if (sameDay(target, tomorrow)) return getString(R.string.tomorrow_at, time);
+        DateFormat dateFormat = new SimpleDateFormat(
+                preferences.usesIndonesian() ? "EEE, d MMM" : "EEE, MMM d", locale);
+        return getString(R.string.date_at, dateFormat.format(new Date(timestamp)), time);
     }
 
     private boolean sameDay(Calendar first, Calendar second) {

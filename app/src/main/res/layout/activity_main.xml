@@ -230,7 +230,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Previous reminders"
+                    android:text="@string/history_title"
                     android:textColor="@color/ink"
                     android:textSize="26sp"
                     android:textStyle="bold" />
@@ -239,7 +239,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="7dp"
-                    android:text="Completed reminders live here, out of your way."
+                    android:text="@string/history_support"
                     android:textColor="@color/ink_muted"
                     android:textSize="14sp" />
 
@@ -252,7 +252,7 @@
                     android:minWidth="0dp"
                     android:paddingStart="14dp"
                     android:paddingEnd="14dp"
-                    android:text="Clear completed"
+                    android:text="@string/clear_history"
                     android:textAllCaps="false"
                     android:textColor="@color/sage_dark"
                     android:textSize="12sp"
@@ -287,7 +287,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Settings"
+                    android:text="@string/settings_title"
                     android:textColor="@color/ink"
                     android:textSize="26sp"
                     android:textStyle="bold" />
@@ -296,7 +296,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="7dp"
-                    android:text="Keep your reminders reliable and your space calm."
+                    android:text="@string/settings_support"
                     android:textColor="@color/ink_muted"
                     android:textSize="14sp" />
 
@@ -311,7 +311,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Alarm sound"
+                        android:text="@string/language_title"
                         android:textColor="@color/ink"
                         android:textSize="17sp"
                         android:textStyle="bold" />
@@ -320,7 +320,58 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="Your device alarm remains the default."
+                        android:text="@string/language_description"
+                        android:textColor="@color/ink_muted"
+                        android:textSize="13sp" />
+
+                    <RadioGroup
+                        android:id="@+id/language_group"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="11dp"
+                        android:orientation="vertical">
+
+                        <RadioButton
+                            android:id="@+id/english_language_radio"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:text="@string/language_english"
+                            android:textColor="@color/ink"
+                            android:textSize="14sp" />
+
+                        <RadioButton
+                            android:id="@+id/indonesian_language_radio"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="3dp"
+                            android:text="@string/language_indonesian"
+                            android:textColor="@color/ink"
+                            android:textSize="14sp" />
+                    </RadioGroup>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/bg_card"
+                    android:orientation="vertical"
+                    android:padding="17dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/alarm_sound_title"
+                        android:textColor="@color/ink"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="@string/alarm_sound_description"
                         android:textColor="@color/ink_muted"
                         android:textSize="13sp" />
 
@@ -336,7 +387,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:checked="true"
-                            android:text="Device alarm sound (default)"
+                            android:text="@string/device_alarm_label"
                             android:textColor="@color/ink"
                             android:textSize="14sp" />
 
@@ -345,7 +396,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="3dp"
-                            android:text="RemindME alarm sound"
+                            android:text="@string/remindme_alarm_label"
                             android:textColor="@color/ink"
                             android:textSize="14sp" />
                     </RadioGroup>
@@ -354,7 +405,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Both options play on Android’s alarm stream, not the silent-ringer stream."
+                        android:text="@string/alarm_stream_note"
                         android:textColor="@color/ink_hint"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -377,7 +428,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Dark mode"
+                            android:text="@string/dark_mode_title"
                             android:textColor="@color/ink"
                             android:textSize="17sp"
                             android:textStyle="bold" />
@@ -386,7 +437,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:text="Use a darker, softer reminder space."
+                            android:text="@string/dark_mode_description"
                             android:textColor="@color/ink_muted"
                             android:textSize="13sp" />
                     </LinearLayout>
@@ -395,7 +446,7 @@
                         android:id="@+id/dark_mode_switch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:contentDescription="Toggle dark mode"
+                        android:contentDescription="@string/dark_mode_toggle_description"
                         android:showText="false" />
                 </LinearLayout>
 
@@ -404,7 +455,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     android:gravity="center"
-                    android:text="Settings are stored only on this device."
+                    android:text="@string/settings_local_note"
                     android:textColor="@color/ink_hint"
                     android:textSize="11sp" />
             </LinearLayout>
@@ -430,7 +481,7 @@
             android:layout_weight="1"
             android:background="@drawable/bg_nav_selected"
             android:clickable="true"
-            android:contentDescription="Home"
+            android:contentDescription="@string/nav_home"
             android:focusable="true"
             android:gravity="center"
             android:orientation="vertical">
@@ -448,7 +499,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
-                android:text="Home"
+                android:text="@string/nav_home"
                 android:textColor="@color/dock_active"
                 android:textSize="10sp"
                 android:textStyle="bold" />
@@ -462,7 +513,7 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:clickable="true"
-            android:contentDescription="Previous reminders"
+            android:contentDescription="@string/nav_previous_description"
             android:focusable="true"
             android:gravity="center"
             android:orientation="vertical">
@@ -480,7 +531,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
-                android:text="Previous"
+                android:text="@string/nav_previous"
                 android:textColor="@color/dock_inactive"
                 android:textSize="10sp" />
         </LinearLayout>
@@ -493,7 +544,7 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:clickable="true"
-            android:contentDescription="Settings"
+            android:contentDescription="@string/nav_settings"
             android:focusable="true"
             android:gravity="center"
             android:orientation="vertical">
@@ -511,7 +562,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
-                android:text="Settings"
+                android:text="@string/nav_settings"
                 android:textColor="@color/dock_inactive"
                 android:textSize="10sp" />
         </LinearLayout>

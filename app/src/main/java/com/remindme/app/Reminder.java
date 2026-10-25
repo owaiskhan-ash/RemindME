@@ -14,7 +14,7 @@ public final class Reminder {
 
     public Reminder(String id, String title, String sourceText, long triggerAt) {
         this.id = id;
-        this.title = title;
+        this.title = ReminderText.clean(title);
         this.sourceText = sourceText;
         this.triggerAt = triggerAt;
         this.completed = false;

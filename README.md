@@ -1,28 +1,33 @@
 # RemindME for Android
 
-A focused native Android reminder app — not a web landing page.
+A focused native Android reminder app - not a web landing page.
 
 Write one thought in plain language, such as:
 
-> `Tomorrow at 9 AM — check in with Abdullah about homework`
+> `Tomorrow at 9 AM - check in with Abdullah about homework`
 
-RemindME turns it into **Check-in with Abdullah about homework** and schedules it for **tomorrow at 9:00 AM**. It also corrects common input such as `tomrws` and `ceckin`.
+or in Bahasa Indonesia:
+
+> `Ingatkan saya besok jam 9 pagi untuk cek PR Abdullah`
+
+RemindME turns those phrases into a scheduled Android alarm. It also corrects common English input such as `tomrws` and `ceckin`.
 
 ## What the app does
 
-- Parses everyday reminder phrases, including `tomrws` → `tomorrow` and `ceckin` → `check-in`
-- Understands tomorrow, today, weekdays, `at 4pm`, morning/evening, and `in 10 minutes`
+- Offers an in-app **English / Bahasa Indonesia** language setting that persists across launches
+- Parses common English and Bahasa Indonesia reminder phrases, including `besok`, `lusa`, weekdays, `jam 9 pagi`, `pukul 16:30`, `dalam 10 menit`, and `10 menit lagi`
+- Requires an explicit date and time before scheduling; the preview clearly asks for any missing detail instead of silently guessing a time
 - Schedules a device alarm with `AlarmManager`, so it can arrive after the app is closed
 - Plays through Android's dedicated **alarm** audio stream, so ordinary ring/silent mode does not mute a due reminder
 - Uses the device's default alarm sound by default; Settings also offers the optional RemindME alarm clip, streamed only when selected and safely falling back to the device alarm if it cannot play
-- Shows a high-priority foreground alarm notification with **Snooze 10 min** and **Mark done** actions
+- Shows a high-priority foreground alarm notification with localized **Snooze 10 min** and **Mark done** actions
 - Moves a snoozed reminder exactly 10 minutes ahead and refreshes its visible upcoming state
 - Stops the active alarm and moves a completed reminder to **Previous**
+- Cleans stale replacement-glyph and repeated-question-mark artifacts from reminder titles before they reach the alarm notification
 - Keeps the interface intentionally small: **Home**, **Previous**, and **Settings** are always available from the bottom dock
 - Starts in persisted dark mode by default, with a light-mode toggle in Settings
 - Reschedules outstanding reminders after a reboot or app update
 - Keeps reminder text in local `SharedPreferences` on the device
-- Requests notification and, where needed, exact-alarm access at the appropriate moment
 
 The native logo uses bold **RE** lettering recessed into a dark-green felt panel with stitched leather trim. Its app-header asset has a transparent external background, and the selected artwork is also exported as density-specific Android launcher icons.
 
@@ -44,7 +49,7 @@ The release build is signed with the standard debug key so it is installable for
 
 ## CI release artifact
 
-`.github/workflows/android-release.yml` builds and uploads `RemindME-v1.0.3-release-apk` on every push to this Arena branch. The workflow uses JDK 17 and Android API 35.
+`.github/workflows/android-release.yml` builds and uploads `RemindME-v1.0.4-release-apk` on every push to this Arena branch. The workflow uses JDK 17 and Android API 35.
 
 ## Important Android behavior
 

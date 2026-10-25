@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">RemindME</string>
+    <string name="tagline">Pengingat yang jelas, pada waktu yang tepat.</string>
+    <string name="logo_description">RE pada ikon felt dan kulit</string>
+
+    <string name="prompt">Apa yang ingin Anda ingat?</string>
+    <string name="prompt_support">Tulis dengan alami. Sertakan tanggal dan waktu agar alarm dapat dijadwalkan.</string>
+    <string name="input_hint">Coba: Besok pukul 09.00 - cek PR Abdullah</string>
+    <string name="smart_parse">Pahami teks</string>
+    <string name="preview_empty">Pengingat Anda akan muncul di sini.</string>
+    <string name="preview_scheduled">%1$s - %2$s</string>
+    <string name="preview_ready">Siap dijadwalkan.</string>
+    <string name="missing_date_and_time">Mohon sebutkan tanggal dan waktu, misalnya besok pukul 09.00.</string>
+    <string name="missing_date">Mohon sebutkan tanggal, misalnya besok.</string>
+    <string name="missing_time">Mohon sebutkan waktu, misalnya pukul 09.00.</string>
+    <string name="write_reminder_first">Tulis pengingat terlebih dahulu</string>
+    <string name="default_reminder_title">Pengingat</string>
+    <string name="set_reminder">Atur pengingat</string>
+    <string name="alarm_set_for">Alarm diatur untuk %1$s</string>
+
+    <string name="notification_default">Aktifkan notifikasi untuk menerima pemberitahuan dan alarm saat waktunya tiba.</string>
+    <string name="access_notification_needed">Aktifkan notifikasi untuk menerima pemberitahuan dan alarm saat waktunya tiba.</string>
+    <string name="access_exact_alarm_needed">Notifikasi sudah aktif. Izinkan alarm presisi agar pengingat tiba tepat waktu.</string>
+    <string name="access_dnd_needed">Nada alarm memakai volume alarm, bahkan saat ponsel senyap. Izinkan akses Jangan Ganggu hanya jika alarm perlu melewati mode tersebut.</string>
+    <string name="access_ready">Alarm siap. Alarm memakai saluran alarm Android, jadi mode dering dan senyap tidak akan membisukannya.</string>
+    <string name="enable">Aktifkan</string>
+    <string name="allow_alarms">Izinkan alarm</string>
+    <string name="dnd_access">Akses JG</string>
+    <string name="access_on">Aktif</string>
+    <string name="open_alarm_settings">Buka pengaturan Android untuk mengizinkan alarm dan pengingat.</string>
+    <string name="open_dnd_settings">Buka pengaturan Android untuk mengizinkan akses Jangan Ganggu.</string>
+    <string name="notifications_enabled">Notifikasi aktif</string>
+    <string name="notifications_later">Pengingat disimpan. Anda dapat mengaktifkan notifikasi nanti di pengaturan Android.</string>
+
+    <string name="upcoming">Mendatang</string>
+    <string name="empty_upcoming">Belum ada pengingat. Pengingat berikutnya akan muncul di sini.</string>
+    <string name="empty_history">Belum ada riwayat pengingat. Tandai selesai untuk memindahkannya ke sini.</string>
+    <string name="due_now_action">Saat ini - tunda dari alarm atau tandai selesai.</string>
+    <string name="button_mark_done">Tandai selesai</string>
+    <string name="button_delete">Hapus</string>
+    <string name="completed">Selesai</string>
+    <string name="done_moved_previous">Ditandai selesai - dipindahkan ke Riwayat.</string>
+    <string name="reminder_deleted">Pengingat dihapus</string>
+    <string name="completed_cleared">Pengingat selesai dihapus</string>
+    <string name="privacy_note">Pengingat disimpan hanya di perangkat ini.</string>
+
+    <string name="notification_title">RemindME</string>
+    <string name="alarm_active_title">Alarm RemindME</string>
+    <string name="alarm_channel_name">Alarm pengingat</string>
+    <string name="alarm_channel_description">Alarm pengingat dengan tindakan Tunda dan Tandai selesai.</string>
+    <string name="snooze_ten_minutes">Tunda 10 mnt</string>
+    <string name="mark_done">Tandai selesai</string>
+
+    <string name="history_title">Riwayat pengingat</string>
+    <string name="history_support">Pengingat yang selesai tersimpan di sini, tidak mengganggu daftar Anda.</string>
+    <string name="clear_history">Hapus yang selesai</string>
+
+    <string name="settings_title">Pengaturan</string>
+    <string name="settings_support">Jaga pengingat tetap andal dan ruang Anda tetap tenang.</string>
+    <string name="language_title">Bahasa</string>
+    <string name="language_description">Pilih bahasa untuk RemindME dan tindakan alarmnya.</string>
+    <string name="language_english">English</string>
+    <string name="language_indonesian">Bahasa Indonesia</string>
+    <string name="alarm_sound_title">Nada alarm</string>
+    <string name="alarm_sound_description">Nada alarm perangkat tetap menjadi pilihan awal.</string>
+    <string name="device_alarm_label">Nada alarm perangkat (awal)</string>
+    <string name="remindme_alarm_label">Nada alarm RemindME</string>
+    <string name="alarm_stream_note">Kedua pilihan memakai saluran alarm Android, bukan saluran dering senyap.</string>
+    <string name="dark_mode_title">Mode gelap</string>
+    <string name="dark_mode_description">Gunakan ruang pengingat yang lebih gelap dan lembut.</string>
+    <string name="dark_mode_toggle_description">Ubah mode gelap</string>
+    <string name="settings_local_note">Pengaturan disimpan hanya di perangkat ini.</string>
+
+    <string name="today_at">Hari ini pukul %1$s</string>
+    <string name="tomorrow_at">Besok pukul %1$s</string>
+    <string name="date_at">%1$s pukul %2$s</string>
+
+    <string name="nav_home">Beranda</string>
+    <string name="nav_previous">Riwayat</string>
+    <string name="nav_previous_description">Riwayat pengingat</string>
+    <string name="nav_settings">Pengaturan</string>
+</resources>

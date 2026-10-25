@@ -3,18 +3,81 @@
     <string name="app_name">RemindME</string>
     <string name="tagline">A clear nudge, at the right moment.</string>
     <string name="logo_description">RE, recessed into a felt and leather icon</string>
+
     <string name="prompt">What do you want to remember?</string>
-    <string name="prompt_support">Write it naturally. We’ll understand the date, time, and person.</string>
-    <string name="input_hint">Try: Tomorrow at 9 AM — check in with Abdullah about homework</string>
+    <string name="prompt_support">Write it naturally. Include a date and time so your alarm can be scheduled.</string>
+    <string name="input_hint">Try: Tomorrow at 9 AM - check in with Abdullah about homework</string>
     <string name="smart_parse">Smart parse</string>
     <string name="preview_empty">Your reminder will appear here.</string>
+    <string name="preview_scheduled">%1$s - %2$s</string>
+    <string name="preview_ready">Ready to schedule.</string>
+    <string name="missing_date_and_time">Please mention a date and time, for example tomorrow at 9 AM.</string>
+    <string name="missing_date">Please mention a date, for example tomorrow.</string>
+    <string name="missing_time">Please mention a time, for example at 9 AM.</string>
+    <string name="write_reminder_first">Write a reminder first</string>
+    <string name="default_reminder_title">Reminder</string>
     <string name="set_reminder">Set reminder</string>
+    <string name="alarm_set_for">Alarm set for %1$s</string>
+
     <string name="notification_default">Turn on notifications to receive a clear alert and gentle alarm when it is due.</string>
+    <string name="access_notification_needed">Turn on notifications to receive a clear alert and gentle alarm when it is due.</string>
+    <string name="access_exact_alarm_needed">Notifications are on. Allow exact alarms for minute-accurate reminders.</string>
+    <string name="access_dnd_needed">Alarm tones use the alarm volume, even when your phone is silent. Allow Do Not Disturb access only if you want alarms to break through DND too.</string>
+    <string name="access_ready">Alarm alerts are ready. They use the Android alarm stream, so ring and silent mode will not mute them.</string>
     <string name="enable">Enable</string>
+    <string name="allow_alarms">Allow alarms</string>
+    <string name="dnd_access">DND access</string>
+    <string name="access_on">On</string>
+    <string name="open_alarm_settings">Open Android settings to allow alarms and reminders.</string>
+    <string name="open_dnd_settings">Open Android settings to allow Do Not Disturb access.</string>
+    <string name="notifications_enabled">Notifications enabled</string>
+    <string name="notifications_later">Reminders are saved. You can enable alerts later in Android settings.</string>
+
     <string name="upcoming">Upcoming</string>
-    <string name="clear_done">Clear done</string>
+    <string name="empty_upcoming">Nothing scheduled yet. Your next gentle nudge will appear here.</string>
+    <string name="empty_history">No previous reminders yet. Mark one done and it will live here.</string>
+    <string name="due_now_action">Due now - snooze from the alarm or mark it done.</string>
+    <string name="button_mark_done">Mark done</string>
+    <string name="button_delete">Delete</string>
+    <string name="completed">Completed</string>
+    <string name="done_moved_previous">Marked done - moved to Previous.</string>
+    <string name="reminder_deleted">Reminder deleted</string>
+    <string name="completed_cleared">Completed reminders cleared</string>
     <string name="privacy_note">Your reminders are stored only on this device.</string>
+
     <string name="notification_title">RemindME</string>
+    <string name="alarm_active_title">RemindME alarm</string>
+    <string name="alarm_channel_name">Reminder alarms</string>
+    <string name="alarm_channel_description">Reminder alarms with Snooze and Mark done actions.</string>
     <string name="snooze_ten_minutes">Snooze 10 min</string>
     <string name="mark_done">Mark done</string>
+
+    <string name="history_title">Previous reminders</string>
+    <string name="history_support">Completed reminders live here, out of your way.</string>
+    <string name="clear_history">Clear completed</string>
+
+    <string name="settings_title">Settings</string>
+    <string name="settings_support">Keep your reminders reliable and your space calm.</string>
+    <string name="language_title">Language</string>
+    <string name="language_description">Choose the language for RemindME and its alarm actions.</string>
+    <string name="language_english">English</string>
+    <string name="language_indonesian">Bahasa Indonesia</string>
+    <string name="alarm_sound_title">Alarm sound</string>
+    <string name="alarm_sound_description">Your device alarm remains the default.</string>
+    <string name="device_alarm_label">Device alarm sound (default)</string>
+    <string name="remindme_alarm_label">RemindME alarm sound</string>
+    <string name="alarm_stream_note">Both options play on the Android alarm stream, not the silent-ringer stream.</string>
+    <string name="dark_mode_title">Dark mode</string>
+    <string name="dark_mode_description">Use a darker, softer reminder space.</string>
+    <string name="dark_mode_toggle_description">Toggle dark mode</string>
+    <string name="settings_local_note">Settings are stored only on this device.</string>
+
+    <string name="today_at">Today at %1$s</string>
+    <string name="tomorrow_at">Tomorrow at %1$s</string>
+    <string name="date_at">%1$s at %2$s</string>
+
+    <string name="nav_home">Home</string>
+    <string name="nav_previous">Previous</string>
+    <string name="nav_previous_description">Previous reminders</string>
+    <string name="nav_settings">Settings</string>
 </resources>
