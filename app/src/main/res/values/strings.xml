@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">RemindME</string>
     <string name="tagline">A clear nudge, at the right moment.</string>
-    <string name="logo_description">RE, recessed into a felt-textured box</string>
+    <string name="logo_description">RE, recessed into a felt and leather icon</string>
     <string name="prompt">What do you want to remember?</string>
     <string name="prompt_support">Write it naturally. We’ll understand the date, time, and person.</string>
     <string name="input_hint">Try: Tomorrow at 9 AM — check in with Abdullah about homework</string>

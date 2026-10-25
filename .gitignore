@@ -1,3 +1,6 @@
+# Design source renders kept locally; optimized Android assets live under app/src/main/res.
+design/
+
 # Android / Gradle
 .tools/
 .gradle/

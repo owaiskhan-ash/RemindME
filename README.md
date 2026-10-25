@@ -20,7 +20,7 @@ RemindME turns it into **Check-in with Abdullah about homework** and schedules i
 - Keeps reminder text in local `SharedPreferences` on the device
 - Requests notification and, where needed, exact-alarm access at the appropriate moment
 
-The native logo is rendered in-app as **RE** block lettering recessed into a custom felt-textured green box. It is drawn with Android Canvas, so it remains sharp at all densities without relying on a web image.
+The native logo uses bold **RE** lettering recessed into a dark-green felt panel with stitched leather trim. The selected artwork is shown in the app header and exported as density-specific Android launcher icons.
 
 ## Build locally
 
@@ -40,7 +40,7 @@ The release build is signed with the standard debug key so it is installable for
 
 ## CI release artifact
 
-`.github/workflows/android-release.yml` builds and uploads `RemindME-v1.0.1-release-apk` on every push to this Arena branch. The workflow uses JDK 17 and Android API 35.
+`.github/workflows/android-release.yml` builds and uploads `RemindME-v1.0.2-release-apk` on every push to this Arena branch. The workflow uses JDK 17 and Android API 35.
 
 ## Important Android behavior
 
