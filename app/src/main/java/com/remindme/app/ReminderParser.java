@@ -136,7 +136,7 @@ public final class ReminderParser {
                 .replaceFirst("(?i)^\\s*(?:to\\s+)?", "")
                 .replaceFirst("(?i)^\\s*for\\s+", "")
                 .replaceAll("\\s+", " ")
-                .replaceAll("^[,;:—–-]+|[,;:—–-]+$", "")
+                .replaceAll("^\\s*[,;:—–-]+\\s*|\\s*[,;:—–-]+\\s*$", "")
                 .trim();
 
         if (title.isEmpty()) return "";

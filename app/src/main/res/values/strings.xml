@@ -5,7 +5,7 @@
     <string name="logo_description">RE, recessed into a felt-textured box</string>
     <string name="prompt">What do you want to remember?</string>
     <string name="prompt_support">Write it naturally. We’ll understand the date, time, and person.</string>
-    <string name="input_hint">Try: Remind me for tomrws homework ceckin for Abdullah</string>
+    <string name="input_hint">Try: Tomorrow at 9 AM — check in with Abdullah about homework</string>
     <string name="smart_parse">Smart parse</string>
     <string name="preview_empty">Your reminder will appear here.</string>
     <string name="set_reminder">Set reminder</string>

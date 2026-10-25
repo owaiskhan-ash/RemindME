@@ -11,14 +11,13 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.Icon;
 import android.media.AudioAttributes;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
 
-/** Delivers the notification and handles the notification's snooze/complete actions. */
+/** Delivers the alarm notification and its Snooze/Mark done actions. */
 public final class ReminderReceiver extends BroadcastReceiver {
-    public static final String CHANNEL_ID = "gentle_reminders";
-    private static final String CHANNEL_NAME = "Gentle reminders";
+    // A new channel ID keeps the alarm-stream behavior distinct from older builds.
+    public static final String CHANNEL_ID = "reminder_alarms_v2";
+    private static final String CHANNEL_NAME = "Reminder alarms";
     private static final String POST_NOTIFICATIONS = "android.permission.POST_NOTIFICATIONS";
 
     @Override
@@ -33,6 +32,7 @@ public final class ReminderReceiver extends BroadcastReceiver {
         String action = intent.getAction();
         ReminderScheduler scheduler = new ReminderScheduler(context);
         if (ReminderScheduler.ACTION_SNOOZE.equals(action)) {
+            AlarmSoundService.stop(context);
             reminder.triggerAt = System.currentTimeMillis() + 10 * 60 * 1000L;
             reminder.notified = false;
             store.update(reminder);
@@ -42,6 +42,7 @@ public final class ReminderReceiver extends BroadcastReceiver {
         }
 
         if (ReminderScheduler.ACTION_COMPLETE.equals(action)) {
+            AlarmSoundService.stop(context);
             reminder.completed = true;
             reminder.notified = true;
             store.update(reminder);
@@ -54,13 +55,32 @@ public final class ReminderReceiver extends BroadcastReceiver {
         reminder.notified = true;
         store.update(reminder);
         showReminder(context, reminder);
+        try {
+            // A foreground service keeps the looping alarm stream alive after this
+            // short-lived receiver returns, including while the app UI is closed.
+            AlarmSoundService.start(context, reminder);
+        } catch (RuntimeException ignored) {
+            // The visible alarm notification remains available if a device blocks a
+            // foreground-service launch under a vendor-specific battery policy.
+        }
     }
 
     public static void createNotificationChannel(Context context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return;
         NotificationManager manager = context.getSystemService(NotificationManager.class);
-        Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-        AudioAttributes audioAttributes = new AudioAttributes.Builder()
+        boolean hasDndAccess = manager.isNotificationPolicyAccessGranted();
+        NotificationChannel existing = manager.getNotificationChannel(CHANNEL_ID);
+
+        // A channel's DND behavior is immutable after creation. Once the user
+        // explicitly grants policy access, rebuild this app-owned channel so it
+        // can show the active alarm notification during Do Not Disturb as well.
+        if (existing != null && hasDndAccess && !existing.canBypassDnd()) {
+            manager.deleteNotificationChannel(CHANNEL_ID);
+            existing = null;
+        }
+        if (existing != null) return;
+
+        AudioAttributes alarmAttributes = new AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_ALARM)
                 .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                 .build();
@@ -69,20 +89,17 @@ public final class ReminderReceiver extends BroadcastReceiver {
                 CHANNEL_NAME,
                 NotificationManager.IMPORTANCE_HIGH
         );
-        channel.setDescription("A clear notification and gentle alarm when a reminder is due.");
+        channel.setDescription("Full-volume reminder alarms with Snooze and Mark done actions.");
         channel.enableVibration(true);
         channel.setVibrationPattern(new long[]{0, 160, 110, 160});
-        channel.setSound(alarmSound, audioAttributes);
+        // AlarmSoundService owns the audible tone to avoid duplicate sounds. The
+        // service uses USAGE_ALARM, which is separate from ring/silent mode.
+        channel.setSound(null, alarmAttributes);
+        if (hasDndAccess) channel.setBypassDnd(true);
         manager.createNotificationChannel(channel);
     }
 
-    private static void showReminder(Context context, Reminder reminder) {
-        if (Build.VERSION.SDK_INT >= 33
-                && context.checkSelfPermission(POST_NOTIFICATIONS)
-                != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-
+    static Notification buildReminderNotification(Context context, Reminder reminder, boolean alarmActive) {
         createNotificationChannel(context);
         ReminderScheduler scheduler = new ReminderScheduler(context);
         Intent openApp = new Intent(context, MainActivity.class)
@@ -106,23 +123,32 @@ public final class ReminderReceiver extends BroadcastReceiver {
                 scheduler.actionPendingIntent(reminder, ReminderScheduler.ACTION_COMPLETE)
         ).build();
 
-        Notification notification = new Notification.Builder(context, CHANNEL_ID)
+        return new Notification.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_stat_re)
                 .setColor(Color.rgb(62, 84, 74))
-                .setContentTitle(context.getString(R.string.notification_title))
+                .setContentTitle(alarmActive ? "RemindME alarm" : context.getString(R.string.notification_title))
                 .setContentText(reminder.title)
                 .setStyle(new Notification.BigTextStyle().bigText(reminder.title))
                 .setContentIntent(contentIntent)
-                .setAutoCancel(true)
-                .setCategory(Notification.CATEGORY_REMINDER)
+                .setAutoCancel(!alarmActive)
+                .setOngoing(alarmActive)
+                .setOnlyAlertOnce(true)
+                .setCategory(Notification.CATEGORY_ALARM)
                 .setPriority(Notification.PRIORITY_HIGH)
                 .setVisibility(Notification.VISIBILITY_PUBLIC)
                 .addAction(snoozeAction)
                 .addAction(completeAction)
                 .build();
+    }
 
+    private static void showReminder(Context context, Reminder reminder) {
+        if (Build.VERSION.SDK_INT >= 33
+                && context.checkSelfPermission(POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
         NotificationManager manager = context.getSystemService(NotificationManager.class);
-        manager.notify(reminder.requestCode(), notification);
+        manager.notify(reminder.requestCode(), buildReminderNotification(context, reminder, false));
     }
 
     private static void cancelNotification(Context context, Reminder reminder) {

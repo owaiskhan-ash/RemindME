@@ -2,6 +2,7 @@ package com.remindme.app;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Paint;
@@ -92,6 +93,9 @@ public final class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
         if (store != null) {
+            // Recreate the dedicated channel after the user returns from Android's
+            // Do Not Disturb access screen, so the channel can bypass DND too.
+            ReminderReceiver.createNotificationChannel(this);
             refreshReminderList();
             updateAccessCard();
         }
@@ -235,6 +239,7 @@ public final class MainActivity extends Activity {
         reminder.completed = !reminder.completed;
         if (reminder.completed) {
             scheduler.cancel(reminder);
+            dismissActiveAlarm(reminder);
             Toast.makeText(this, "Marked complete", Toast.LENGTH_SHORT).show();
         } else {
             reminder.notified = false;
@@ -247,9 +252,16 @@ public final class MainActivity extends Activity {
 
     private void deleteReminder(Reminder reminder) {
         scheduler.cancel(reminder);
+        dismissActiveAlarm(reminder);
         store.delete(reminder.id);
         refreshReminderList();
         Toast.makeText(this, "Reminder deleted", Toast.LENGTH_SHORT).show();
+    }
+
+    private void dismissActiveAlarm(Reminder reminder) {
+        AlarmSoundService.stop(this);
+        NotificationManager manager = getSystemService(NotificationManager.class);
+        if (manager != null) manager.cancel(reminder.requestCode());
     }
 
     private void clearCompleted() {
@@ -273,7 +285,15 @@ public final class MainActivity extends Activity {
             }
             return;
         }
-        Toast.makeText(this, "Alerts are ready.", Toast.LENGTH_SHORT).show();
+        if (needsDndAlarmAccess()) {
+            try {
+                startActivity(new Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS));
+            } catch (Exception ignored) {
+                Toast.makeText(this, "Open Android settings to allow Do Not Disturb access.", Toast.LENGTH_LONG).show();
+            }
+            return;
+        }
+        Toast.makeText(this, "Alarm alerts are ready, even when the ringer is silent.", Toast.LENGTH_SHORT).show();
     }
 
     private void requestNotificationPermission() {
@@ -293,6 +313,11 @@ public final class MainActivity extends Activity {
         return manager != null && !manager.canScheduleExactAlarms();
     }
 
+    private boolean needsDndAlarmAccess() {
+        NotificationManager manager = getSystemService(NotificationManager.class);
+        return manager != null && !manager.isNotificationPolicyAccessGranted();
+    }
+
     private void updateAccessCard() {
         if (notificationMessage == null) return;
         if (needsNotificationPermission()) {
@@ -303,8 +328,12 @@ public final class MainActivity extends Activity {
             notificationMessage.setText("Notifications are on. Allow exact alarms for minute-accurate reminders.");
             permissionButton.setText("Allow alarms");
             permissionButton.setVisibility(View.VISIBLE);
+        } else if (needsDndAlarmAccess()) {
+            notificationMessage.setText("Alarm tones use the alarm volume, even when your phone is silent. Allow Do Not Disturb access only if you want alarms to break through DND too.");
+            permissionButton.setText("DND access");
+            permissionButton.setVisibility(View.VISIBLE);
         } else {
-            notificationMessage.setText("Alerts are ready. Your reminder can arrive even after you close the app.");
+            notificationMessage.setText("Alarm alerts are ready. They use Android’s alarm stream, so ring/silent mode will not mute them.");
             permissionButton.setText("On");
             permissionButton.setVisibility(View.VISIBLE);
         }
