@@ -20,6 +20,8 @@ npm start
 
 Open `http://localhost:4173`. Run the tests with `npm test`. No install or build step is required. The page uses the public `main` branch for the live catalog, so uncommitted local folders will not appear unless the live request is unavailable and the fallback snapshot is regenerated.
 
-The site can be hosted directly from the repository root, including on GitHub Pages. It uses relative file URLs, so the image folders must be published alongside `index.html`. If this repository is forked or renamed, update `REPOSITORY` and `BRANCH` in `site/catalog.js` and the fallback GitHub link in `index.html`.
+The site can be hosted directly from the repository root. To publish with GitHub Pages, open **Settings → Pages**, choose **Deploy from a branch**, then select `main` and `/(root)` and save. The expected address is `https://owaiskhan-ash.github.io/RemindME/` after the initial deployment completes.
+
+The site uses relative file URLs, so the image folders must be published alongside `index.html`. If this repository is forked or renamed, update `REPOSITORY` and `BRANCH` in `site/catalog.js` and the fallback GitHub link in `index.html`.
 
 JSZip and the self-hosted fonts are included in `site/`; their licenses are alongside them.
