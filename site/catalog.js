@@ -92,7 +92,7 @@ export function collectionsFromTree(tree) {
 }
 
 export function formatFolderDate(date) {
-  if (!date) return 'UNDATED COLLECTION';
+  if (!date) return 'UNDATED FOLDER';
   const month = new Intl.DateTimeFormat('en', { month: 'long', timeZone: 'UTC' }).format(new Date(date.timestamp));
   return `${month.toUpperCase()} ${String(date.day).padStart(2, '0')}${date.inferredYear ? '' : `, ${date.year}`}`;
 }
