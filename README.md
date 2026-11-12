@@ -1,6 +1,6 @@
 # The Image Archive
 
-A small, static landing page for the image folders in this repository. It lists collections from newest to oldest, lets visitors search, and downloads each folder—including nested files and notes—as a ZIP. Original files are not changed.
+A minimal, static folder browser for the images in this repository. It lists folders from newest to oldest, lets visitors search and preview their contents, and downloads each folder—including nested files and notes—as a ZIP. Original files are not changed.
 
 ## Add a collection
 

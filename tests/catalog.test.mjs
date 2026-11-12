@@ -17,6 +17,7 @@ test('invalid or undated folder names are not mistaken for dates', () => {
   assert.equal(parseFolderDate('31st Feb 2026'), null);
   assert.equal(parseFolderDate('2026-02-30'), null);
   assert.equal(parseFolderDate('Summer photos'), null);
+  assert.equal(formatFolderDate(null), 'UNDATED FOLDER');
   assert.ok(parseFolderDate('29th Feb 2028'));
 });
 
