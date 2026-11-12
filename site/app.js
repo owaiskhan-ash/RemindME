@@ -277,7 +277,7 @@ async function loadCollections() {
       elements.list.replaceChildren();
       elements.list.setAttribute('aria-busy', 'false');
       elements.empty.hidden = true;
-      elements.folderTotal.textContent = '—';
+      elements.folderTotal.textContent = '?';
       elements.folderTotal.setAttribute('aria-label', 'Number of folders unavailable');
       elements.visibleCount.textContent = '';
       showSyncMessage('Couldn’t load folders.');

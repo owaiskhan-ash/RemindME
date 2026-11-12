@@ -1,6 +1,6 @@
-# The Image Archive
+# Book Storage
 
-A minimal, static folder browser for the images in this repository. It lists folders from newest to oldest, lets visitors search and preview their contents, and downloads each folder—including nested files and notes—as a ZIP. Original files are not changed.
+A minimal, static folder browser for the images in this repository. It lists folders from newest to oldest, lets visitors search and preview their contents, and downloads each folder as a ZIP, including nested files and notes. Original files are not changed.
 
 ## Add a collection
 
@@ -20,7 +20,9 @@ npm start
 
 Open `http://localhost:4173`. Run the tests with `npm test`. No install or build step is required. The page uses the public `main` branch for the live catalog, so uncommitted local folders will not appear unless the live request is unavailable and the fallback snapshot is regenerated.
 
-The site can be hosted directly from the repository root. To publish with GitHub Pages, open **Settings → Pages**, choose **Deploy from a branch**, then select `main` and `/(root)` and save. The expected address is `https://owaiskhan-ash.github.io/RemindME/` after the initial deployment completes.
+The primary site is `https://bookstorage.justsimpleapps.online/`. Its canonical URL and social sharing metadata are in `index.html`, and the share image is `site/share-card.jpg`. Deploy these files to the domain's existing host for the sharing preview to become available.
+
+The site can also be hosted directly from the repository root with GitHub Pages: open **Settings → Pages**, choose **Deploy from a branch**, then select `main` and `/(root)` and save. Update the canonical URL and share-image URL in `index.html` if a different domain becomes the primary site.
 
 The site uses relative file URLs, so the image folders must be published alongside `index.html`. If this repository is forked or renamed, update `REPOSITORY` and `BRANCH` in `site/catalog.js` and the fallback GitHub link in `index.html`.
 
