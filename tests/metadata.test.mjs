@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
+import { BRANCH, REPOSITORY } from '../site/catalog.js';
 
 const root = new URL('../', import.meta.url);
 const html = await readFile(new URL('index.html', root), 'utf8');
@@ -45,6 +46,11 @@ test('canonical and share metadata use the provided domain', () => {
   assert.ok(meta('property', 'og:description'));
   assert.ok(meta('property', 'og:image:alt'));
   assert.equal(meta('name', 'twitter:card'), 'summary_large_image');
+});
+
+test('folder discovery and the fallback link use the renamed repository', () => {
+  assert.equal(REPOSITORY, 'owaiskhan-ash/Storage-Books');
+  assert.ok(html.includes(`href="https://github.com/${REPOSITORY}/tree/${BRANCH}"`));
 });
 
 test('share image has the advertised dimensions and no extra JPEG metadata', async () => {
