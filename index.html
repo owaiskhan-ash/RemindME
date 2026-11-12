@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f5ed">
+    <meta name="description" content="A little home for your image collections. Browse by date and download a whole folder at a time.">
+    <title>The Image Archive — Your collections, all in one place</title>
+    <link rel="preload" href="./site/fonts/dm-serif-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="./site/fonts/dm-sans-400.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="./site/styles.css">
+    <script defer src="./site/vendor/jszip.min.js"></script>
+    <script type="module" src="./site/app.js"></script>
+  </head>
+  <body>
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <div class="hero-inner">
+            <p class="brand-mark"><span class="brand-symbol" aria-hidden="true">✳</span> THE IMAGE ARCHIVE <span class="brand-line" aria-hidden="true"></span> A LITTLE LIBRARY</p>
+            <div class="hero-intro">
+              <p class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span> A HOME FOR YOUR COLLECTIONS</p>
+              <h1 id="hero-title">Good things,<br>all in <em>one place.</em></h1>
+              <p class="hero-description">A little home for your image collections. Browse by date, find what you need, and take the whole folder with you.</p>
+              <a class="button button-dark hero-button" href="#collections">Explore the collections <span class="button-arrow" aria-hidden="true">↘</span></a>
+            </div>
+            <div class="hero-details" aria-label="Archive at a glance">
+              <div class="hero-stat"><strong id="hero-collection-count">—</strong><span id="hero-collection-label">COLLECTIONS</span></div>
+              <div class="hero-stat"><strong id="hero-image-count">—</strong><span>IMAGES TO EXPLORE</span></div>
+              <div class="hero-note"><span class="mini-flower" aria-hidden="true">✳</span> CURATED WITH CARE</div>
+            </div>
+          </div>
+        </div>
+        <div class="hero-art" aria-label="A preview of images from the archive">
+          <div class="art-topline"><span>A LITTLE LOOK INSIDE</span><span>THE IMAGE ARCHIVE <span aria-hidden="true">↗</span></span></div>
+          <div class="art-orbit art-orbit-one" aria-hidden="true"></div>
+          <div class="art-orbit art-orbit-two" aria-hidden="true"></div>
+          <div class="hero-gallery" id="hero-gallery" aria-hidden="true">
+            <figure class="hero-photo hero-photo-one"><img src="./7th%20Nov%20Day/04-angelina-on-stage.jpg" alt="" width="928" height="1152"><figcaption>01 / A LITTLE MAGIC</figcaption></figure>
+            <figure class="hero-photo hero-photo-two"><img src="./7th%20Nov%20Day/15-i-love-you-more.jpg" alt="" width="928" height="1152"><figcaption>02 / SOMETHING LOVELY</figcaption></figure>
+            <figure class="hero-photo hero-photo-three"><img src="./7th%20Nov%20Day/21-ill-love-you-always.jpg" alt="" width="928" height="1152"><figcaption>03 / ONE TO KEEP</figcaption></figure>
+          </div>
+          <div class="art-bottomline"><span><span class="art-sparkle" aria-hidden="true">✳</span> A PLACE FOR ALL THE GOOD STUFF</span><span>SCROLL TO EXPLORE ↓</span></div>
+        </div>
+      </section>
+
+      <section class="archive" id="collections" aria-labelledby="collections-title">
+        <div class="section-heading">
+          <div class="section-copy">
+            <p class="eyebrow section-eyebrow"><span class="section-number">01 /</span> THE ARCHIVE</p>
+            <h2 id="collections-title">Find your <em>collection.</em></h2>
+            <p>All your folders, thoughtfully gathered in one place.<br class="desktop-break"> The newest collections are always first.</p>
+          </div>
+          <div class="search-area">
+            <label for="collection-search">LOOKING FOR SOMETHING?</label>
+            <div class="search-box">
+              <svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 4.5 4.5"></path></svg>
+              <input id="collection-search" type="search" placeholder="Search by date or name" autocomplete="off">
+              <span class="search-shortcut" aria-hidden="true">/</span>
+            </div>
+            <p class="search-hint"><span class="hint-dot" aria-hidden="true"></span> Neatly sorted, newest to oldest</p>
+          </div>
+        </div>
+        <div class="archive-divider">
+          <p><span id="collection-count">ALL COLLECTIONS</span> <span class="divider-count" id="visible-count"></span></p>
+          <p class="order-label">NEWEST FIRST <span aria-hidden="true">↓</span></p>
+        </div>
+        <div id="sync-status" class="sync-status" role="status" hidden></div>
+        <div id="collection-list" class="collection-grid" aria-live="polite" aria-busy="true">
+          <div class="loading-state"><span class="loading-dot" aria-hidden="true"></span> Gathering your collections...</div>
+        </div>
+        <div id="empty-state" class="empty-state" hidden>
+          <span class="empty-symbol" aria-hidden="true">✳</span>
+          <h3>Nothing here just yet.</h3>
+          <p>Try a different search and see what you find.</p>
+        </div>
+        <noscript><p class="noscript">Please enable JavaScript to browse and download collections. You can also <a href="https://github.com/owaiskhan-ash/RemindME/tree/main">view the folders on GitHub</a>.</p></noscript>
+      </section>
+    </main>
+  </body>
+</html>
