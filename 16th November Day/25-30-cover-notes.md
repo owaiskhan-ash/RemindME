@@ -1,0 +1,14 @@
+# Cover notes: 25-30
+
+Each image in this batch was generated as a complete AI image using the supplied photograph as a reference, including both the book and its setting. The photographed books were not pasted onto separate backgrounds. The cover illustrations, lettering, publisher marks and surface details are AI recreations rather than exact reproductions, so details may differ from the photographs.
+
+The portrait exports are 3,200 × 4,000 pixels (4:5), resized from 928 × 1,152 generated images and cropped slightly to the final ratio. They are not native 8K. Themes are inferred from the covers.
+
+| No. and title | Genre and theme | Mood and dominant colors | Cover details |
+| --- | --- | --- | --- |
+| **25. I'm Learning Numbers** | Toddler concept board book; learning numbers with everyday objects. | Playful and bright; black, purple, blue, green and teal with rainbow accents. | White block title above colorful NUMBERS tiles, with photo cut-outs of a baby in a wooden tub, a rainbow hot-air balloon, a football and a yellow feather on mosaic color blocks; the bargain price sticker remains visible. |
+| **26. The Glass Heart: A tale of three princesses** | Children's fairy tale by Sally Gardner; three princesses and a glass heart in a Venice-inspired kingdom. | Dreamy and romantic; pale blue, aqua, sand ochre and plum. | Watercolor cityscape of domes, palazzos and gondolas behind a faceted glass-heart emblem with plum serif title lettering. |
+| **27. Lucy & Tom's Christmas** | Classic children's Christmas picture book by Shirley Hughes; Christmas morning excitement. | Warm and nostalgic; ivory cream, berry red and amber-ochre. | Red serif title above a pen-and-ink bedroom scene of two children with stocking and toys, framed by holly and red berries; the Puffin logo, price print and barcode remain visible. |
+| **28. Hen's Pens** | Usborne Phonics Readers early reader by Phil Roxbee Cox and Stephen Cartwright; a hen, her pens and phonics wordplay. | Cheeky and bright; sky blue, orange-brown, red and yellow. | Cartoon hen with a red comb clutching colorful pens beside a zigzag-patterned egg, pastel chevron background, cream synthetic-phonics badge and the Usborne balloon logo. |
+| **29. WWII Spitfire Pilot: At the Battle of Britain** | Children's wartime action story by F. J. Beerling and Gareth Bowler; Battle of Britain fighter pilots. | Heroic and adventurous; sky blue, olive green, khaki and gold. | Two camouflaged Spitfires with RAF roundels and cartoon animal pilots in goggles beneath a metallic gold action title. |
+| **30. The Queen's Halloween** | Children's Halloween story by Sally Kemp, illustrated by Mike Taylor; a girl dressed as a queen. | Playful and mischievous; pale grey, maroon, gold and black. | A crowned girl in a black-and-gold ermine-spotted robe sits on an ornate gold throne with her spaniel, under an arched gold-outlined title. |
