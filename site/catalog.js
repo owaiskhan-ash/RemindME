@@ -13,6 +13,8 @@ const MONTHS = {
   october: 10, nov: 11, november: 11, dec: 12, december: 12,
 };
 const MONTH_PATTERN = '(?:january|jan|february|feb|march|mar|april|apr|may|june|jun|july|jul|august|aug|september|sept|sep|october|oct|november|nov|december|dec)';
+const NIGHT_NAME = /\bnight\b/i;
+const DAY_NAME = /\bday\b/i;
 const dayFirst = new RegExp(`\\b(\\d{1,2})(?:st|nd|rd|th)?[\\s._-]+(${MONTH_PATTERN})\\b`, 'i');
 const monthFirst = new RegExp(`\\b(${MONTH_PATTERN})[\\s._-]+(\\d{1,2})(?:st|nd|rd|th)?\\b`, 'i');
 const collator = new Intl.Collator('en', { numeric: true, sensitivity: 'base' });
@@ -52,6 +54,14 @@ export function parseFolderDate(name) {
 export function isImage(path) { return IMAGE_EXTENSION.test(path); }
 export function isPreviewableImage(path) { return PREVIEW_EXTENSION.test(path); }
 
+/** Night collections get a starfield, day collections get a sunny sky; everything else is neutral. */
+export function folderTheme(name) {
+  if (typeof name !== 'string') return 'plain';
+  if (NIGHT_NAME.test(name)) return 'night';
+  if (DAY_NAME.test(name)) return 'day';
+  return 'plain';
+}
+
 /** Turn a Git tree (or local snapshot in the same format) into collections. */
 export function collectionsFromTree(tree) {
   const groups = new Map();
@@ -77,6 +87,7 @@ export function collectionsFromTree(tree) {
     const images = files.filter(file => file.isImage);
     return {
       name,
+      theme: folderTheme(name),
       date: parseFolderDate(name),
       files,
       images,

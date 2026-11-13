@@ -28,6 +28,70 @@ const icons = {
   file: '<svg aria-hidden="true" viewBox="0 0 24 24" fill="none"><path d="M6 3.5h8l4 4V20H6zM14 3.5v4h4"></path></svg>',
 };
 let cards = [];
+let sceneSeed = 0;
+
+const SCENE_STARS = 26;
+const SCENE_CLOUDS = 5;
+
+function mulberry32(seed) {
+  return () => {
+    seed = (seed + 0x6d2b79f5) | 0;
+    let t = seed;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function makeStarField() {
+  const random = mulberry32((sceneSeed = (sceneSeed + 1) | 0) * 7919 + 13);
+  const field = makeElement('span', 'card-stars');
+  field.setAttribute('aria-hidden', 'true');
+  for (let index = 0; index < SCENE_STARS; index += 1) {
+    const star = makeElement('i', 'card-star');
+    const size = (random() * 1.7 + 0.85).toFixed(2);
+    star.style.setProperty('--x', `${(random() * 100).toFixed(2)}%`);
+    star.style.setProperty('--y', `${(random() * 100).toFixed(2)}%`);
+    star.style.setProperty('--size', `${size}px`);
+    star.style.setProperty('--delay', `${(random() * 5.5).toFixed(2)}s`);
+    star.style.setProperty('--duration', `${(random() * 2.6 + 2.2).toFixed(2)}s`);
+    if (index % 7 === 0) star.classList.add('is-large');
+    field.append(star);
+  }
+  return field;
+}
+
+function makeCloudLayer() {
+  const random = mulberry32((sceneSeed = (sceneSeed + 1) | 0) * 5501 + 29);
+  const layer = makeElement('span', 'card-clouds');
+  layer.setAttribute('aria-hidden', 'true');
+  for (let index = 0; index < SCENE_CLOUDS; index += 1) {
+    const cloud = makeElement('i', 'card-cloud');
+    cloud.style.setProperty('--y', `${(random() * 52 + 4).toFixed(2)}%`);
+    cloud.style.setProperty('--scale', `${(random() * 0.5 + 0.6).toFixed(2)}`);
+    cloud.style.setProperty('--drift', `${(random() * 12 + 20).toFixed(1)}s`);
+    cloud.style.setProperty('--delay', `${(-random() * 26).toFixed(1)}s`);
+    layer.append(cloud);
+  }
+  return layer;
+}
+
+function makeCardScene(theme) {
+  if (theme !== 'night' && theme !== 'day') return null;
+  const scene = makeElement('span', `card-scene card-scene-${theme}`);
+  scene.setAttribute('aria-hidden', 'true');
+  scene.append(theme === 'night' ? makeStarField() : makeCloudLayer());
+  if (theme === 'night') {
+    const moon = makeElement('i', 'card-moon');
+    const shooting = makeElement('i', 'card-shooting-star');
+    scene.append(moon, shooting);
+  } else {
+    const sun = makeElement('i', 'card-sun');
+    scene.append(sun);
+  }
+  return scene;
+}
+
 
 function assetUrl(path) {
   return new URL(`./${encodePath(path)}`, document.baseURI).href;
@@ -45,11 +109,14 @@ function makeElement(tag, className, text) {
 }
 
 function makeCard(collection) {
-  const card = makeElement('article', 'collection-card');
+  const theme = collection.theme || 'plain';
+  const card = makeElement('article', `collection-card card-theme-${theme}`);
+  card.dataset.theme = theme;
   card.dataset.search = `${collection.name} ${formatFolderDate(collection.date)}`.toLocaleLowerCase();
 
   const heading = makeElement('div', 'card-heading');
   const folderIcon = makeElement('span', 'folder-icon');
+  folderIcon.dataset.theme = theme;
   folderIcon.innerHTML = icons.folder;
   const headingText = makeElement('div', 'card-heading-text');
   const title = makeElement('h2', 'card-title', collection.name);
@@ -71,6 +138,9 @@ function makeCard(collection) {
   previewArea.type = 'button';
   previewArea.setAttribute('aria-label', `Preview ${collection.name}`);
   previewArea.addEventListener('click', () => openPreview(collection));
+  const scene = makeCardScene(theme);
+  if (scene) previewArea.append(scene);
+
   const previews = choosePreviews(collection, 4);
   if (previews.length) {
     const grid = makeElement('div', 'card-image-grid');

@@ -87,8 +87,48 @@ h1 { font-size: clamp(2.5rem, 3.5vw, 3.5rem); font-weight: 300; letter-spacing: 
 .icon-button:hover { transform: translateY(-1px); border-color: #d8d9d4; background: #f2f2ef; }
 .icon-button svg { width: 17px; height: 17px; }
 
-.card-preview { display: flex; width: 100%; min-height: 164px; align-items: center; justify-content: center; padding: 18px; border: 0; border-top: 1px solid #e8e8e5; border-bottom: 1px solid #e8e8e5; background: #efefec; transition: background .22s ease; }
+.card-preview { position: relative; display: flex; width: 100%; min-height: 164px; align-items: center; justify-content: center; padding: 18px; overflow: hidden; border: 0; border-top: 1px solid #e8e8e5; border-bottom: 1px solid #e8e8e5; background: #efefec; transition: background .22s ease; }
 .card-preview:hover { background: #e9eae6; }
+.card-image-grid, .preview-placeholder { position: relative; z-index: 2; }
+
+/* Night collections: a starfield with a moon and drifting shooting stars. */
+.card-theme-night .card-preview { border-top-color: #1c2340; border-bottom-color: #141a30; background: radial-gradient(120% 90% at 78% 0%, #33406e 0%, #232c50 42%, #171d38 78%, #11162a 100%); }
+.card-theme-night .card-preview:hover { background: radial-gradient(120% 90% at 78% 0%, #3a4878 0%, #283257 42%, #1a2140 78%, #13182e 100%); }
+.card-scene { position: absolute; z-index: 1; inset: 0; display: block; overflow: hidden; pointer-events: none; }
+.card-stars { position: absolute; inset: 0; display: block; }
+.card-star { position: absolute; top: var(--y); left: var(--x); width: var(--size); height: var(--size); border-radius: 50%; background: #fff; box-shadow: 0 0 4px rgba(190, 214, 255, .85); opacity: .25; animation: card-twinkle var(--duration) ease-in-out infinite; animation-delay: var(--delay); }
+.card-star.is-large { background: #fffdf2; box-shadow: 0 0 7px 1px rgba(255, 245, 205, .9); }
+.card-star.is-large::before, .card-star.is-large::after { content: ""; position: absolute; top: 50%; left: 50%; border-radius: 2px; background: linear-gradient(90deg, transparent, rgba(255, 253, 235, .95), transparent); transform: translate(-50%, -50%); }
+.card-star.is-large::before { width: 9px; height: 1px; }
+.card-star.is-large::after { width: 1px; height: 9px; }
+.card-moon { position: absolute; top: 13%; right: 11%; width: 26px; height: 26px; border-radius: 50%; background: radial-gradient(circle at 34% 32%, #fffdf1 0%, #f6eec9 58%, #e6d9a8 100%); box-shadow: 0 0 16px 5px rgba(255, 246, 200, .36), inset -6px -3px 0 -1px rgba(214, 195, 138, .45); transform: rotate(-18deg); }
+.card-shooting-star { position: absolute; top: 22%; left: -22%; width: 96px; height: 1.6px; border-radius: 2px; background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(214, 232, 255, .62) 55%, #fff 100%); opacity: 0; filter: drop-shadow(0 0 4px rgba(214, 232, 255, .8)); animation: card-shoot 8.5s ease-in 2.2s infinite; }
+@keyframes card-twinkle { 0%, 100% { opacity: .22; transform: scale(.82); } 50% { opacity: 1; transform: scale(1.12); } }
+@keyframes card-shoot {
+  0% { opacity: 0; transform: translate3d(0, 0, 0) rotate(14deg) scaleX(.35); }
+  3% { opacity: 1; }
+  11% { opacity: .95; }
+  22% { opacity: 0; transform: translate3d(340px, 96px, 0) rotate(14deg) scaleX(1); }
+  100% { opacity: 0; transform: translate3d(340px, 96px, 0) rotate(14deg) scaleX(1); }
+}
+
+/* Day collections: a warm sun with soft clouds drifting across a blue sky. */
+.card-theme-day .card-preview { border-top-color: #cfe3f4; border-bottom-color: #b6d3ec; background: linear-gradient(176deg, #93c9ee 0%, #b9dcf5 46%, #dcf0fb 78%, #f3faff 100%); }
+.card-theme-day .card-preview:hover { background: linear-gradient(176deg, #9fd0f1 0%, #c2e2f7 46%, #e4f4fd 78%, #f8fcff 100%); }
+.card-sun { position: absolute; top: -18px; left: -12px; width: 74px; height: 74px; border-radius: 50%; background: radial-gradient(circle at 50% 50%, #fffaf0 0%, #ffe9a8 34%, #ffd166 62%, #ffbb45 100%); box-shadow: 0 0 26px 12px rgba(255, 214, 122, .48), 0 0 58px 26px rgba(255, 205, 108, .22); animation: card-sun-pulse 7s ease-in-out infinite; }
+.card-cloud { position: absolute; top: var(--y); left: 0; width: 74px; height: 22px; margin-top: 4px; border-radius: 999px; background: linear-gradient(180deg, #ffffff 0%, #eef6fd 62%, #d9e9f7 100%); box-shadow: 0 6px 14px rgba(72, 116, 158, .16); opacity: .92; transform: scale(var(--scale)); animation: card-drift var(--drift) linear infinite; animation-delay: var(--delay); }
+.card-cloud::before, .card-cloud::after { content: ""; position: absolute; border-radius: 50%; background: inherit; }
+.card-cloud::before { width: 38px; height: 38px; top: -16px; left: 10px; }
+.card-cloud::after { width: 27px; height: 27px; top: -11px; left: 39px; }
+@keyframes card-drift { from { transform: translateX(-130px) scale(var(--scale)); } to { transform: translateX(470px) scale(var(--scale)); } }
+@keyframes card-sun-pulse { 0%, 100% { box-shadow: 0 0 24px 10px rgba(255, 214, 122, .42), 0 0 54px 22px rgba(255, 205, 108, .2); } 50% { box-shadow: 0 0 32px 15px rgba(255, 214, 122, .58), 0 0 72px 32px rgba(255, 205, 108, .3); } }
+
+/* Keep the artwork cards readable on top of the scenes. */
+.card-theme-night .card-image, .card-theme-day .card-image { box-shadow: 0 4px 12px rgba(20, 26, 44, .22); }
+.card-theme-night .folder-icon { border-color: #3a4468; background: linear-gradient(160deg, #2b3455 0%, #1d2440 100%); }
+.card-theme-night .folder-icon svg { stroke: #d5def7; }
+.card-theme-day .folder-icon { border-color: #cfe0ef; background: linear-gradient(160deg, #eaf6ff 0%, #d7ecfb 100%); }
+.card-theme-day .folder-icon svg { stroke: #3f6f96; }
 .card-preview:focus-visible { outline-offset: -4px; }
 .card-image-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px; width: 100%; }
 .card-image { display: block; min-width: 0; padding: 3px; border-radius: 2px; background: #fff; box-shadow: 0 3px 8px rgba(35, 36, 33, .09); }
@@ -158,4 +198,7 @@ h1 { font-size: clamp(2.5rem, 3.5vw, 3.5rem); font-weight: 300; letter-spacing: 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   .collection-card:hover, .button:hover, .icon-button:hover, .preview-file:hover { transform: none; }
+  .card-star { opacity: .6; }
+  .card-shooting-star { display: none; }
+  .card-cloud { animation: none; transform: translateX(30px) scale(var(--scale)); }
 }
