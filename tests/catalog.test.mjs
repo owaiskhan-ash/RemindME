@@ -7,6 +7,8 @@ test('parses the existing folder convention and dates with an explicit year', ()
     year: 2026, month: 11, day: 7, inferredYear: true, timestamp: Date.UTC(2026, 10, 7),
   });
   assert.equal(formatFolderDate(parseFolderDate('7th Nov Day')), 'NOVEMBER 07');
+  assert.equal(formatFolderDate(parseFolderDate('16th November Day')), 'NOVEMBER 16');
+  assert.ok(parseFolderDate('16th November Day').timestamp > parseFolderDate('7th Nov Day').timestamp);
   assert.equal(formatFolderDate(parseFolderDate('9th November Day 2027')), 'NOVEMBER 09, 2027');
   assert.equal(formatFolderDate(parseFolderDate('November 9, 2026')), 'NOVEMBER 09, 2026');
   assert.equal(parseFolderDate('2027-01-02').timestamp, Date.UTC(2027, 0, 2));
